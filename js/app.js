@@ -1,5 +1,13 @@
 import { APP_COPY } from "./data.js";
 import { loadState, saveState, resetState, exportState } from "./storage.js";
+import {
+  createLocalAccount,
+  signInLocalAccount,
+  signOutLocalAccount,
+  deleteLocalAccount,
+  getLocalAccount,
+  isPrototypeSignedIn
+} from "./auth.js";
 
 let state = loadState();
 let activeRoute = "dashboard";
@@ -7,6 +15,97 @@ let installPrompt = null;
 
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
+
+function setAuthView(view = "create") {
+  const createForm = $("#createAccountForm");
+  const signInForm = $("#signInForm");
+  const createTab = $("#showCreateAccount");
+  const signInTab = $("#showSignIn");
+
+  const showingCreate = view === "create";
+
+  createForm.hidden = !showingCreate;
+  signInForm.hidden = showingCreate;
+
+  createTab.classList.toggle("active", showingCreate);
+  signInTab.classList.toggle("active", !showingCreate);
+}
+
+function applyAuthGate() {
+  const authScreen = $("#authScreen");
+  const appShell = $(".app-shell");
+  const account = getLocalAccount();
+
+  if (isPrototypeSignedIn()) {
+    authScreen.hidden = true;
+    appShell.hidden = false;
+    return;
+  }
+
+  authScreen.hidden = false;
+  appShell.hidden = true;
+
+  setAuthView(account ? "signin" : "create");
+}
+
+async function handleCreateAccount(event) {
+  event.preventDefault();
+
+  const form = new FormData(event.target);
+  const password = String(form.get("password") || "");
+  const confirmPassword = String(form.get("confirmPassword") || "");
+
+  if (password !== confirmPassword) {
+    showToast("Passwords do not match.");
+    return;
+  }
+
+  try {
+    const account = await createLocalAccount({
+      firstName: form.get("firstName"),
+      lastName: form.get("lastName"),
+      displayName: form.get("displayName"),
+      username: form.get("username"),
+      email: form.get("email"),
+      password
+    });
+
+    state.profile.firstName = account.firstName;
+    state.profile.lastName = account.lastName;
+    state.profile.displayName = account.displayName;
+    state.profile.username = account.username;
+
+    state.profile.initials =
+      `${account.firstName?.[0] || ""}${account.lastName?.[0] || ""}`
+        .toUpperCase();
+
+    saveState(state);
+    applyAuthGate();
+    renderRoute(activeRoute);
+    showToast("Prototype account created.");
+  } catch (error) {
+    showToast(error.message || "Could not create prototype account.");
+  }
+}
+
+async function handleSignIn(event) {
+  event.preventDefault();
+
+  const form = new FormData(event.target);
+
+  try {
+    await signInLocalAccount({
+      email: form.get("email"),
+      password: form.get("password")
+    });
+
+    applyAuthGate();
+    renderRoute(activeRoute);
+    showToast("Signed in.");
+  } catch (error) {
+    showToast(error.message || "Could not sign in.");
+  }
+}
 
 function escapeHtml(value = "") {
   return String(value)
@@ -622,6 +721,11 @@ case "reset-data": {
 
 function bindGlobalEvents() {
   document.addEventListener("click", event => {
+    const authTab = event.target.closest("[data-auth-view]");
+if (authTab) {
+  setAuthView(authTab.dataset.authView);
+  return;
+}
     const routeButton = event.target.closest("[data-route]");
     if (routeButton) { setRoute(routeButton.dataset.route); return; }
     const actionButton = event.target.closest("[data-action]");
@@ -631,11 +735,21 @@ function bindGlobalEvents() {
   document.addEventListener("input", event => {
     if (event.target.matches("#opportunitySearch")) renderOpportunityGrid();
   });
+  
   document.addEventListener("change", event => {
     if (event.target.matches("#opportunityTypeFilter")) renderOpportunityGrid();
   });
 
   document.addEventListener("submit", event => {
+      if (event.target.id === "createAccountForm") {
+    handleCreateAccount(event);
+    return;
+  }
+
+  if (event.target.id === "signInForm") {
+    handleSignIn(event);
+    return;
+  }
     if (event.target.id === "trainingForm") {
       event.preventDefault();
       const form = new FormData(event.target);
@@ -646,6 +760,7 @@ function bindGlobalEvents() {
         date: form.get("date"), type: form.get("type"), minutes, trueTouchMinutes,
         focus: form.get("focus"), notes: form.get("notes") || ""
       });
+      
       state.development.totalHours = Math.round((state.development.totalHours + minutes / 60) * 100) / 100;
       state.development.trueTouchHours = Math.round((state.development.trueTouchHours + trueTouchMinutes / 60) * 100) / 100;
       state.development.currentWeekHours = Math.round((state.development.currentWeekHours + minutes / 60) * 100) / 100;
@@ -711,7 +826,8 @@ function setupPwa() {
 function initialize() {
   bindGlobalEvents();
   setupPwa();
-  setRoute("dashboard");
+  applyAuthGate();
+if (isPrototypeSignedIn()) setRoute("dashboard");
 }
 
 initialize();

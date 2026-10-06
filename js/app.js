@@ -26,6 +26,39 @@ function totalMinutesToHours(minutes) {
   return Math.round((minutes / 60) * 100) / 100;
 }
 
+function getPublicIdentityText(profile) {
+  const firstName = String(profile.firstName || "").trim();
+  const lastName = String(profile.lastName || "").trim();
+
+  const realName =
+    profile.nameFormat === "first"
+      ? firstName
+      : [firstName, lastName].filter(Boolean).join(" ");
+
+  const displayName =
+    String(profile.displayName || "").trim() || realName || "Player";
+
+  const usernameValue = String(profile.username || "")
+    .trim()
+    .replace(/^@+/, "");
+
+  const username = usernameValue ? `@${usernameValue}` : "";
+
+  const modes = {
+    display: [displayName],
+    username: [username],
+    name: [realName],
+    "display-username": [displayName, username],
+    "name-username": [realName, username],
+    "display-name": [displayName, realName],
+    all: [displayName, username, realName]
+  };
+
+  const selected = modes[profile.publicIdentityMode] || modes.display;
+
+  return [...new Set(selected.filter(Boolean))].join(" · ");
+}
+
 function showToast(message) {
   const toast = $("#toast");
   toast.textContent = message;
@@ -173,15 +206,14 @@ function renderDashboard() {
 function renderProfile() {
   const view = $("#view-profile");
   const p = state.profile;
-  const publicName = p.displayName || `${p.firstName} ${p.lastName}`;
-  const publicUsername = String(p.username || "").replace(/^@+/, "");
+ const publicIdentity = getPublicIdentityText(p);
   view.innerHTML = `
     ${pageHead("Athlete Passport", "Your soccer identity, in one profile", "Prototype of an athlete-controlled profile designed to show development, experience, goals, and verified accomplishments over time.", `<button class="button secondary" data-action="edit-profile">Edit profile</button>`)}
 
     <div class="card profile-hero">
       <div class="profile-avatar">${escapeHtml(p.initials)}</div>
       <div class="profile-name">
-        <h2>${escapeHtml(p.firstName)} ${escapeHtml(p.lastName)}</h2>
+       <h2>${escapeHtml(publicIdentity)}</h2>
         <p>${escapeHtml(p.headline)}</p>
         <div class="tag-row"><span class="tag green">${escapeHtml(p.primaryPosition)}</span><span class="tag">${escapeHtml(p.experienceLevel)}</span><span class="tag blue">${escapeHtml(p.city)}, ${escapeHtml(p.region)}</span></div>
       </div>

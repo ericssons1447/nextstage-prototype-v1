@@ -49,6 +49,25 @@ function syncWeeklyGoal() {
   goal.detail = `Current: ${current.toFixed(1)} of ${target} hours`;
 }
 
+function syncTrueTouchGoal() {
+  const goal = state.goals.find(goal => goal.id === "g2");
+  if (!goal) return;
+
+  const current = state.development.trueTouchHours;
+  const target = 25;
+
+  const formattedCurrent = current
+    .toFixed(2)
+    .replace(/\.?0+$/, "");
+
+  goal.progress = Math.min(
+    100,
+    Math.round((current / target) * 100)
+  );
+
+  goal.detail = `Current: ${formattedCurrent} of ${target} hours`;
+}
+
 function setRoute(route) {
   activeRoute = route;
   $$(".view").forEach(view => view.classList.toggle("active", view.dataset.view === route));
@@ -351,6 +370,7 @@ function renderSettings() {
 
 function renderRoute(route) {
   syncWeeklyGoal();
+  syncTrueTouchGoal();
   
   const renderers = {
     dashboard: renderDashboard,

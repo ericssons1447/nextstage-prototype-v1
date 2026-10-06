@@ -13,7 +13,177 @@
 </head>
 <body>
   <noscript>This prototype requires JavaScript.</noscript>
+<section class="auth-screen" id="authScreen" hidden>
+  <div class="auth-card">
+    <div class="auth-brand">
+      <div class="brand-mark" aria-hidden="true">NS</div>
+      <div>
+        <strong>NextStage</strong>
+        <span>Athletics</span>
+      </div>
+    </div>
 
+    <div class="auth-copy">
+      <p class="eyebrow">Prototype account</p>
+      <h1>Build your next stage.</h1>
+      <p>
+        Create a local prototype account or sign in to continue.
+        This account exists only on this browser and device.
+      </p>
+    </div>
+
+    <div class="auth-tabs" role="tablist" aria-label="Account access">
+      <button
+        type="button"
+        class="auth-tab active"
+        id="showCreateAccount"
+        data-auth-view="create"
+      >
+        Create account
+      </button>
+
+      <button
+        type="button"
+        class="auth-tab"
+        id="showSignIn"
+        data-auth-view="signin"
+      >
+        Sign in
+      </button>
+    </div>
+
+    <form id="createAccountForm" class="auth-form">
+      <div class="form-grid">
+        <div class="field">
+          <label>First name *</label>
+          <input
+            name="firstName"
+            maxlength="50"
+            autocomplete="given-name"
+            required
+          />
+        </div>
+
+        <div class="field">
+          <label>Last name *</label>
+          <input
+            name="lastName"
+            maxlength="50"
+            autocomplete="family-name"
+            required
+          />
+        </div>
+
+        <div class="field full">
+          <label>Display name *</label>
+          <input
+            name="displayName"
+            maxlength="60"
+            required
+          />
+        </div>
+
+        <div class="field">
+          <label>Username *</label>
+          <input
+            name="username"
+            maxlength="30"
+            autocomplete="username"
+            autocapitalize="none"
+            spellcheck="false"
+            required
+          />
+        </div>
+
+        <div class="field">
+          <label>Email *</label>
+          <input
+            name="email"
+            type="email"
+            maxlength="120"
+            autocomplete="email"
+            required
+          />
+        </div>
+
+        <div class="field">
+          <label>Password *</label>
+          <input
+            name="password"
+            type="password"
+            minlength="8"
+            autocomplete="new-password"
+            required
+          />
+        </div>
+
+        <div class="field">
+          <label>Confirm password *</label>
+          <input
+            name="confirmPassword"
+            type="password"
+            minlength="8"
+            autocomplete="new-password"
+            required
+          />
+        </div>
+
+        <div class="field full">
+          <label class="checkbox-row">
+            <input
+              type="checkbox"
+              name="prototypeAcknowledgement"
+              required
+            />
+            <span>
+              I understand this is a local prototype account stored only on
+              this browser/device.
+            </span>
+          </label>
+        </div>
+      </div>
+
+      <button class="button primary auth-submit" type="submit">
+        Create prototype account
+      </button>
+    </form>
+
+    <form id="signInForm" class="auth-form" hidden>
+      <div class="form-grid">
+        <div class="field full">
+          <label>Email *</label>
+          <input
+            name="email"
+            type="email"
+            maxlength="120"
+            autocomplete="email"
+            required
+          />
+        </div>
+
+        <div class="field full">
+          <label>Password *</label>
+          <input
+            name="password"
+            type="password"
+            autocomplete="current-password"
+            required
+          />
+        </div>
+      </div>
+
+      <button class="button primary auth-submit" type="submit">
+        Sign in
+      </button>
+    </form>
+
+    <p class="auth-footnote">
+      Prototype V1 only. No production NextStage account is created,
+      and account information does not sync between devices.
+    </p>
+  </div>
+</section>
+  
   <div class="app-shell">
     <aside class="desktop-sidebar" aria-label="Main navigation">
       <div class="brand-lockup">

@@ -578,17 +578,44 @@ function handleAction(action, target) {
       if (goal) { goal.progress = Math.min(100, goal.progress + 10); saveAndRefresh("Goal progress updated."); }
       break;
     }
-    case "share-demo":
-      if (navigator.share) navigator.share({ title: "NextStage Prototype V1", text: "NextStage Athletics prototype demo", url: location.href }).catch(() => {});
-      else navigator.clipboard?.writeText(location.href).then(() => showToast("Prototype link copied."));
-      break;
-    case "prototype-contact": showToast("Prototype only - no real message was sent."); break;
-    case "prototype-note": showToast("Prototype only - private note workflow is not connected yet."); break;
-    case "export-data": exportState(state); showToast("Demo data exported."); break;
-    case "reset-data": {
-      if (confirm("Reset all local Prototype V1 changes on this browser?")) { state = resetState(); renderRoute(activeRoute); showToast("Prototype reset."); }
-      break;
-    }
+      case "share-demo": {
+  const sharedIdentity = getPublicIdentityText(state.profile);
+  const shareData = {
+    title: `${sharedIdentity} | NextStage`,
+    text: `${sharedIdentity} — ${state.profile.headline}`,
+    url: location.href
+  };
+
+  if (navigator.share) {
+    navigator.share(shareData).catch(() => {});
+  } else {
+    navigator.clipboard?.writeText(`${shareData.text}\n${shareData.url}`)
+      .then(() => showToast("Prototype profile share text copied."));
+  }
+
+  break;
+}
+    case "prototype-contact":
+  showToast("Prototype only – no real message was sent.");
+  break;
+
+case "prototype-note":
+  showToast("Prototype only – private note workflow is not connected yet.");
+  break;
+
+case "export-data":
+  exportState(state);
+  showToast("Demo data exported.");
+  break;
+
+case "reset-data": {
+  if (confirm("Reset all local Prototype V1 changes on this browser?")) {
+    state = resetState();
+    renderRoute(activeRoute);
+    showToast("Prototype reset.");
+  }
+  break;
+}
     case "install-app": triggerInstall(); break;
   }
 }

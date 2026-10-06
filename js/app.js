@@ -173,6 +173,8 @@ function renderDashboard() {
 function renderProfile() {
   const view = $("#view-profile");
   const p = state.profile;
+  const publicName = p.displayName || `${p.firstName} ${p.lastName}`;
+  const publicUsername = String(p.username || "").replace(/^@+/, "");
   view.innerHTML = `
     ${pageHead("Athlete Passport", "Your soccer identity, in one profile", "Prototype of an athlete-controlled profile designed to show development, experience, goals, and verified accomplishments over time.", `<button class="button secondary" data-action="edit-profile">Edit profile</button>`)}
 

@@ -2,20 +2,22 @@ export const DEFAULT_STATE = {
   version: 1,
   activeRole: "athlete",
   profile: {
-    firstName: "Eric",
-    lastName: "White",
-    initials: "EW",
-    headline: "Developing Midfielder | Late-Starter Development Journey",
+    firstName: "Demo",
+    lastName: "Player",
+    initials: "DP",
+    displayName: "Demo Player",
+    username: "demo.player",
+    headline: "Player Development Profile | Prototype Demo",
     city: "Grand Rapids",
     region: "Michigan",
     country: "United States",
-    ageBand: "18+",
+    ageBand: "Age group not set",
     primaryPosition: "Central Midfielder",
     secondaryPosition: "Right Midfielder",
     dominantFoot: "Right",
     experienceLevel: "Developing / Beginner",
-    availability: "Open to adult training, teams, leagues, and development opportunities",
-    bio: "I am building my soccer experience later than the traditional youth pathway. My goal is to develop measurable technical, tactical, physical, and game experience while documenting the process honestly. NextStage is designed to make nontraditional player journeys easier to organize, show, and improve.",
+    availability: "Open to training, teams, leagues, and development opportunities",
+    bio: "This demo profile shows how a player could document development, experience, goals, achievements, and opportunities over time.",
     profileCompletion: 82,
     visibility: "Prototype - visible to demo coach/scout view"
   },
@@ -51,7 +53,7 @@ export const DEFAULT_STATE = {
   goals: [
     { id: "g1", title: "Reach 8 development hours this week", progress: 56, target: "Weekly", detail: "Current: 4.5 of 8 hours" },
     { id: "g2", title: "Complete 25 hours of true-touch work", progress: 77, target: "Short term", detail: "Current: 19.25 of 25 hours" },
-    { id: "g3", title: "Join an adult team or structured training group", progress: 30, target: "Winter 2027", detail: "Researching realistic beginner-friendly options" }
+    { id: "g3", title: "Join a team or structured training group", progress: 30, target: "Winter 2027", detail: "Researching realistic beginner-friendly options" }
   ],
   achievements: [
     { id: "a1", title: "First 40 Development Hours", type: "Milestone", date: "2026-09-29" },
@@ -59,10 +61,10 @@ export const DEFAULT_STATE = {
     { id: "a3", title: "Player Profile 80% Complete", type: "Profile", date: "2026-09-12" }
   ],
   opportunities: [
-    { id: "o1", type: "Adult Team", title: "Grand River Adult FC - Development Squad", organization: "Demo Organization", city: "Grand Rapids, MI", level: "Beginner-Intermediate", schedule: "Tue evenings", cost: "$", description: "Demo adult team opportunity focused on players building organized match experience.", tags: ["18+", "Team", "Tryout"] },
-    { id: "o2", type: "Training", title: "Small-Group Technical Development", organization: "West Michigan Soccer Lab - Demo", city: "Kentwood, MI", level: "All levels", schedule: "Sat mornings", cost: "$$", description: "Demo small-group session covering first touch, passing, movement, and finishing.", tags: ["Training", "Small group", "Adult"] },
-    { id: "o3", type: "Pickup", title: "Friday Night Adult Open Play", organization: "Community Soccer Network - Demo", city: "Grand Rapids, MI", level: "Recreational", schedule: "Fri 8:00 PM", cost: "$", description: "Demo casual open play for adults seeking game repetitions without a long-term commitment.", tags: ["Pickup", "18+", "Indoor"] },
-    { id: "o4", type: "League", title: "Winter Adult Indoor League", organization: "Lakeshore Sports Center - Demo", city: "Wyoming, MI", level: "Recreational", schedule: "Jan-Mar", cost: "$$", description: "Demo indoor league listing with team and individual registration possibilities.", tags: ["League", "Winter", "Indoor"] },
+    { id: "o1", type: "Team", title: "Grand River FC - Development Squad", organization: "Demo Organization", city: "Grand Rapids, MI", level: "Beginner-Intermediate", schedule: "Tue evenings", cost: "$", description: "Demo team opportunity focused on players building organized match experience.", tags: ["18+", "Team", "Tryout"] },
+    { id: "o2", type: "Training", title: "Small-Group Technical Development", organization: "West Michigan Soccer Lab - Demo", city: "Kentwood, MI", level: "All levels", schedule: "Sat mornings", cost: "$$", description: "Demo small-group session covering first touch, passing, movement, and finishing.", tags: ["Training", "Small group", "All ages"] },
+    { id: "o3", type: "Pickup", title: "Friday Night Open Play", organization: "Community Soccer Network - Demo", city: "Grand Rapids, MI", level: "Recreational", schedule: "Fri 8:00 PM", cost: "$", description: "Demo casual open play for players seeking game repetitions without a long-term commitment.", tags: ["Pickup", "18+", "Indoor"] },
+    { id: "o4", type: "League", title: "Winter Indoor League", organization: "Lakeshore Sports Center - Demo", city: "Wyoming, MI", level: "Recreational", schedule: "Jan-Mar", cost: "$$", description: "Demo indoor league listing with team and individual registration possibilities.", tags: ["League", "Winter", "Age varies"] },
     { id: "o5", type: "Trainer", title: "1-on-1 Technical Trainer", organization: "Alex Morgan Training - Fictional Demo", city: "Grand Rapids, MI", level: "Beginner-Advanced", schedule: "Flexible", cost: "$$$", description: "Fictional demo trainer profile. Personalized sessions and development planning.", tags: ["Private", "Trainer", "Flexible"] },
     { id: "o6", type: "Facility", title: "Community Indoor Field - Open Rental", organization: "Northside Fieldhouse - Demo", city: "Grand Rapids, MI", level: "Any", schedule: "Varies", cost: "$$", description: "Demo facility listing for individual, group, or team field rental.", tags: ["Facility", "Indoor", "Rental"] }
   ],

@@ -34,6 +34,21 @@ function showToast(message) {
   showToast.timer = window.setTimeout(() => toast.classList.remove("show"), 2500);
 }
 
+function syncWeeklyGoal() {
+  const goal = state.goals.find(goal => goal.id === "g1");
+  if (!goal) return;
+
+  const current = state.development.currentWeekHours;
+  const target = state.development.weeklyGoal;
+
+  goal.progress = Math.min(
+    100,
+    Math.round((current / target) * 100)
+  );
+
+  goal.detail = `Current: ${current.toFixed(1)} of ${target} hours`;
+}
+
 function setRoute(route) {
   activeRoute = route;
   $$(".view").forEach(view => view.classList.toggle("active", view.dataset.view === route));
@@ -335,6 +350,8 @@ function renderSettings() {
 }
 
 function renderRoute(route) {
+  syncWeeklyGoal();
+  
   const renderers = {
     dashboard: renderDashboard,
     profile: renderProfile,

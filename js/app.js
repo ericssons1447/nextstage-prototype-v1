@@ -56,7 +56,7 @@ function getPublicIdentityText(profile) {
 
   const selected = modes[profile.publicIdentityMode] || modes.display;
 
-  return [...new Set(selected.filter(Boolean))].join(" · ");
+  return selected.filter(Boolean).join(" · ");
 }
 
 function showToast(message) {

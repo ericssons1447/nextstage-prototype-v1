@@ -445,9 +445,12 @@ function profileModal() {
         <div class="form-grid">
           <div class="field"><label>First name</label><input name="firstName" value="${escapeHtml(p.firstName)}" required></div>
           <div class="field"><label>Last name</label><input name="lastName" value="${escapeHtml(p.lastName)}" required></div>
+          <div class="field"><label>Display name</label><input name="displayName" maxlength="60" value="${escapeHtml(p.displayName || "")}"></div>
+          <div class="field"><label>Username</label><input name="username" maxlength="30" value="${escapeHtml(p.username || "")}"></div>
           <div class="field full"><label>Headline</label><input name="headline" value="${escapeHtml(p.headline)}" required></div>
-          <div class="field"><label>City</label><input name="city" value="${escapeHtml(p.city)}"></div>
-          <div class="field"><label>State / region</label><input name="region" value="${escapeHtml(p.region)}"></div>
+         <div class="field"><label>City</label><input name="city" maxlength="60" value="${escapeHtml(p.city)}"></div>
+         <div class="field"><label>State / province / region</label><input name="region" maxlength="60" value="${escapeHtml(p.region)}"></div>
+         <div class="field full"><label>Country</label><input name="country" maxlength="60" value="${escapeHtml(p.country || "")}"></div>
           <div class="field"><label>Primary position</label><input name="primaryPosition" value="${escapeHtml(p.primaryPosition)}"></div>
           <div class="field"><label>Secondary position</label><input name="secondaryPosition" value="${escapeHtml(p.secondaryPosition)}"></div>
           <div class="field full"><label>Bio</label><textarea name="bio">${escapeHtml(p.bio)}</textarea></div>
@@ -570,7 +573,7 @@ function bindGlobalEvents() {
     if (event.target.id === "profileForm") {
       event.preventDefault();
       const form = new FormData(event.target);
-      for (const key of ["firstName", "lastName", "headline", "city", "region", "primaryPosition", "secondaryPosition", "bio"]) state.profile[key] = form.get(key);
+      for (const key of ["firstName", "lastName", "displayName", "username", "headline", "city", "region", "country", "primaryPosition", "secondaryPosition", "bio"]) state.profile[key] = form.get(key);
       state.profile.initials = `${state.profile.firstName?.[0] || ""}${state.profile.lastName?.[0] || ""}`.toUpperCase();
       state.profile.profileCompletion = Math.min(100, Math.max(60, state.profile.profileCompletion + 2));
       saveState(state); closeModal(); renderRoute(activeRoute); showToast("Demo profile updated.");

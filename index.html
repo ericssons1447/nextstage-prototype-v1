@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0b1f33" />
+  <meta name="description" content="NextStage Athletics Prototype V1 - a soccer development, opportunity, and athlete-profile platform prototype." />
+  <title>NextStage Athletics - Prototype V1</title>
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <link rel="icon" href="./assets/icons/icon-192.png" />
+  <link rel="apple-touch-icon" href="./assets/icons/apple-touch-icon.png" />
+  <link rel="stylesheet" href="./css/styles.css" />
+</head>
+<body>
+  <noscript>This prototype requires JavaScript.</noscript>
+
+  <div class="app-shell">
+    <aside class="desktop-sidebar" aria-label="Main navigation">
+      <div class="brand-lockup">
+        <div class="brand-mark" aria-hidden="true">NS</div>
+        <div>
+          <strong>NextStage</strong>
+          <span>Athletics</span>
+        </div>
+      </div>
+
+      <nav class="side-nav" id="desktopNav">
+        <button class="nav-item active" data-route="dashboard"><span>⌂</span>Home</button>
+        <button class="nav-item" data-route="profile"><span>◎</span>Athlete Passport</button>
+        <button class="nav-item" data-route="development"><span>↗</span>Development</button>
+        <button class="nav-item" data-route="discover"><span>⌕</span>Discover</button>
+        <button class="nav-item" data-route="coach"><span>◫</span>Coach / Scout View</button>
+        <button class="nav-item" data-route="saved"><span>♡</span>Saved</button>
+        <button class="nav-item" data-route="settings"><span>⚙</span>Settings</button>
+      </nav>
+
+      <div class="prototype-badge">
+        <strong>Prototype V1</strong>
+        <span>Demo data only</span>
+      </div>
+    </aside>
+
+    <main class="app-main" id="appMain">
+      <header class="topbar">
+        <div class="mobile-brand">
+          <div class="brand-mark small" aria-hidden="true">NS</div>
+          <div>
+            <strong>NextStage</strong>
+            <span>Prototype V1</span>
+          </div>
+        </div>
+
+        <div class="topbar-actions">
+          <button class="icon-button" id="installButton" hidden title="Install app">⇩</button>
+          <button class="icon-button" id="notificationButton" title="Notifications">◉<span class="notification-dot"></span></button>
+          <button class="avatar-button" id="avatarButton" title="Open profile">EW</button>
+        </div>
+      </header>
+
+      <section class="view active" id="view-dashboard" data-view="dashboard"></section>
+      <section class="view" id="view-profile" data-view="profile"></section>
+      <section class="view" id="view-development" data-view="development"></section>
+      <section class="view" id="view-discover" data-view="discover"></section>
+      <section class="view" id="view-coach" data-view="coach"></section>
+      <section class="view" id="view-saved" data-view="saved"></section>
+      <section class="view" id="view-settings" data-view="settings"></section>
+    </main>
+
+    <nav class="mobile-nav" id="mobileNav" aria-label="Mobile navigation">
+      <button class="mobile-nav-item active" data-route="dashboard"><span>⌂</span><small>Home</small></button>
+      <button class="mobile-nav-item" data-route="discover"><span>⌕</span><small>Discover</small></button>
+      <button class="mobile-nav-item add-action" id="quickAddButton" aria-label="Log training"><span>＋</span></button>
+      <button class="mobile-nav-item" data-route="development"><span>↗</span><small>Develop</small></button>
+      <button class="mobile-nav-item" data-route="profile"><span>◎</span><small>Profile</small></button>
+    </nav>
+  </div>
+
+  <div class="modal-backdrop" id="modalBackdrop" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-header">
+        <div>
+          <p class="eyebrow" id="modalEyebrow">NextStage</p>
+          <h2 id="modalTitle">Modal</h2>
+        </div>
+        <button class="icon-button" id="closeModalButton" aria-label="Close">×</button>
+      </div>
+      <div id="modalBody"></div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script type="module" src="./js/app.js"></script>
+</body>
+</html>

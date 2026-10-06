@@ -7,6 +7,8 @@ export const DEFAULT_STATE = {
     initials: "DP",
     displayName: "Demo Player",
     username: "demo.player",
+    publicIdentityMode: "display",
+    nameFormat: "first-last",
     headline: "Player Development Profile | Prototype Demo",
     city: "Grand Rapids",
     region: "Michigan",

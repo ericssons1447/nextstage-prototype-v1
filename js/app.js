@@ -349,12 +349,13 @@ function renderCoach() {
   const p = state.profile;
   const d = state.development;
   const view = $("#view-coach");
+  const publicIdentity = getPublicIdentityText(p);
   view.innerHTML = `
     ${pageHead("Coach / Scout View", "See the athlete from the other side", "A prototype of what a coach, trainer, club, or scout could see when an athlete intentionally shares a NextStage profile.")}
     <div class="card scout-card">
       <div class="profile-hero">
         <div class="profile-avatar" style="background:#153957">${escapeHtml(p.initials)}</div>
-        <div class="profile-name"><h2>${escapeHtml(p.firstName)} ${escapeHtml(p.lastName)}</h2><p>${escapeHtml(p.headline)}</p><div class="tag-row"><span class="tag green">${escapeHtml(p.primaryPosition)}</span><span class="tag blue">${escapeHtml(p.city)}, ${escapeHtml(p.region)}</span></div></div>
+        <div class="profile-name"><h2>${escapeHtml(publicIdentity)}</h2><p>${escapeHtml(p.headline)}</p><div class="tag-row"><span class="tag green">${escapeHtml(p.primaryPosition)}</span><span class="tag blue">${escapeHtml(p.city)}, ${escapeHtml(p.region)}</span></div></div>
         <button class="button ghost" data-action="prototype-contact">Request contact</button>
       </div>
       <div class="scout-metrics">

@@ -449,19 +449,45 @@ function profileModal() {
         <div class="form-grid">
           <div class="field"><label>First name</label><input name="firstName" maxlength="50" value="${escapeHtml(p.firstName)}" required></div>
           <div class="field"><label>Last name</label><input name="lastName" maxlength="50" value="${escapeHtml(p.lastName)}" required></div>
-          <div class="field"><label>Display name</label><input name="displayName" maxlength="60" value="${escapeHtml(p.displayName || "")}"></div>
-          <div class="field"><label>Username</label><input name="username" maxlength="30" value="${escapeHtml(p.username || "")}"></div>
-          <div class="field full"><label>Headline</label><input name="headline" maxlength="100" value="${escapeHtml(p.headline)}" required></div>
-         <div class="field"><label>City</label><input name="city" maxlength="60" value="${escapeHtml(p.city)}"></div>
-         <div class="field"><label>State / province / region</label><input name="region" maxlength="60" value="${escapeHtml(p.region)}"></div>
-         <div class="field full"><label>Country</label><input name="country" maxlength="60" value="${escapeHtml(p.country || "")}"></div>
-          <div class="field"><label>Primary position</label><input name="primaryPosition" maxlength="50" value="${escapeHtml(p.primaryPosition)}"></div>
-          <div class="field"><label>Secondary position</label><input name="secondaryPosition" maxlength="50" value="${escapeHtml(p.secondaryPosition)}"></div>
-         <div class="field full"><label>Bio</label><textarea name="bio" maxlength="500">${escapeHtml(p.bio)}</textarea></div>
-        </div>
-        <div class="form-actions"><button type="button" class="button secondary" data-action="close-modal">Cancel</button><button class="button primary" type="submit">Save changes</button></div>
-      </form>`
-  });
+         <div class="field"><label>Display name</label><input name="displayName" maxlength="60" value="${escapeHtml(p.displayName || "")}"></div>
+<div class="field"><label>Username</label><input name="username" maxlength="30" value="${escapeHtml(p.username || "")}"></div>
+
+<div class="field full">
+  <label>Public identity</label>
+  <select name="publicIdentityMode">
+    <option value="display" ${p.publicIdentityMode === "display" ? "selected" : ""}>Display name only</option>
+    <option value="username" ${p.publicIdentityMode === "username" ? "selected" : ""}>Username only</option>
+    <option value="name" ${p.publicIdentityMode === "name" ? "selected" : ""}>Name only</option>
+    <option value="display-username" ${p.publicIdentityMode === "display-username" ? "selected" : ""}>Display name + username</option>
+    <option value="name-username" ${p.publicIdentityMode === "name-username" ? "selected" : ""}>Name + username</option>
+    <option value="display-name" ${p.publicIdentityMode === "display-name" ? "selected" : ""}>Display name + name</option>
+    <option value="all" ${p.publicIdentityMode === "all" ? "selected" : ""}>All</option>
+  </select>
+</div>
+
+<div class="field full">
+  <label>Name format</label>
+  <select name="nameFormat">
+    <option value="first" ${p.nameFormat === "first" ? "selected" : ""}>First name only</option>
+    <option value="first-last" ${(p.nameFormat || "first-last") === "first-last" ? "selected" : ""}>First + last name</option>
+  </select>
+</div>
+
+<div class="field full"><label>Headline</label><input name="headline" maxlength="100" value="${escapeHtml(p.headline)}" required></div>
+<div class="field"><label>City</label><input name="city" maxlength="60" value="${escapeHtml(p.city)}"></div>
+<div class="field"><label>State / province / region</label><input name="region" maxlength="60" value="${escapeHtml(p.region)}"></div>
+<div class="field full"><label>Country</label><input name="country" maxlength="60" value="${escapeHtml(p.country || "")}"></div>
+<div class="field"><label>Primary position</label><input name="primaryPosition" maxlength="50" value="${escapeHtml(p.primaryPosition)}"></div>
+<div class="field"><label>Secondary position</label><input name="secondaryPosition" maxlength="50" value="${escapeHtml(p.secondaryPosition)}"></div>
+<div class="field full"><label>Bio</label><textarea name="bio" maxlength="500">${escapeHtml(p.bio)}</textarea></div>
+</div>
+
+<div class="form-actions">
+  <button type="button" class="button secondary" data-action="close-modal">Cancel</button>
+  <button class="button primary" type="submit">Save changes</button>
+</div>
+</form>`
+});
 }
 
 function opportunityDetail(id) {
@@ -577,7 +603,7 @@ function bindGlobalEvents() {
     if (event.target.id === "profileForm") {
       event.preventDefault();
       const form = new FormData(event.target);
-      for (const key of ["firstName", "lastName", "displayName", "username", "headline", "city", "region", "country", "primaryPosition", "secondaryPosition", "bio"]) state.profile[key] = form.get(key);
+      for (const key of ["firstName", "lastName", "displayName", "username", "publicIdentityMode", "nameFormat", "headline", "city", "region", "country", "primaryPosition", "secondaryPosition", "bio"]) state.profile[key] = form.get(key);
       state.profile.initials = `${state.profile.firstName?.[0] || ""}${state.profile.lastName?.[0] || ""}`.toUpperCase();
       state.profile.profileCompletion = Math.min(100, Math.max(60, state.profile.profileCompletion + 2));
       saveState(state); closeModal(); renderRoute(activeRoute); showToast("Demo profile updated.");

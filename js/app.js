@@ -371,6 +371,8 @@ function renderSettings() {
 function renderRoute(route) {
   syncWeeklyGoal();
   syncTrueTouchGoal();
+  const avatarInitials = $("#avatarInitials");
+  if (avatarInitials) avatarInitials.textContent = state.profile.initials || "DP";
   
   const renderers = {
     dashboard: renderDashboard,

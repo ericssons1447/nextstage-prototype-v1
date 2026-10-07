@@ -494,6 +494,26 @@ function renderSettings() {
         </div>
       </div>
       <div class="card">
+      <h3>Prototype account</h3>
+      <div class="settings-list section-space">
+      <div class="setting-row">
+      <div>
+        <strong>Sign out</strong>
+        <span>Sign out of this prototype account on this browser.</span>
+      </div>
+      <button class="button secondary" data-action="account-signout">Sign out</button>
+    </div>
+
+    <div class="setting-row">
+      <div>
+        <strong>Delete prototype account</strong>
+        <span>Permanently removes this local prototype account from this browser/device.</span>
+      </div>
+      <button class="button secondary" data-action="account-delete">Delete account</button>
+    </div>
+  </div>
+</div>
+      <div class="card">
         <h3>Install NextStage</h3>
         <p class="bio">On a supported device, install this website as a web app. On iPhone/iPad, use Safari's Share menu and Add to Home Screen / Open as Web App. On Android Chrome, use Install app when available.</p>
         <button class="button primary" data-action="install-app">Install if available</button>
@@ -713,6 +733,12 @@ case "reset-data": {
     renderRoute(activeRoute);
     showToast("Prototype reset.");
   }
+  break;
+}
+      case "account-signout": {
+        signOutLocalAccount();
+        activeRoute = "dashboard";
+        applyAuthGate();
   break;
 }
     case "install-app": triggerInstall(); break;

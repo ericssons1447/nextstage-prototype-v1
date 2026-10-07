@@ -553,6 +553,20 @@ function closeModal() {
   document.body.style.overflow = "";
 }
 
+function mobileMoreModal() {
+  openModal({
+    eyebrow: "Navigation",
+    title: "More",
+    body: `
+      <div class="settings-list">
+        <button class="button secondary" data-route="profile">Athlete Passport</button>
+        <button class="button secondary" data-route="coach">Coach / Scout View</button>
+        <button class="button secondary" data-route="saved">Saved</button>
+        <button class="button secondary" data-route="settings">Settings</button>
+      </div>`
+  });
+}
+
 function trainingModal() {
   const now = new Date();
 const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
@@ -681,6 +695,7 @@ function handleAction(action, target) {
     case "add-goal": goalModal(); break;
     case "edit-profile": profileModal(); break;
     case "close-modal": closeModal(); break;
+    case "mobile-more": mobileMoreModal(); break;
     case "opportunity-detail": opportunityDetail(target.dataset.opportunityId); break;
     case "session-detail": sessionDetail(target.dataset.sessionId); break;
     case "toggle-save": {
@@ -753,7 +768,11 @@ if (authTab) {
   return;
 }
     const routeButton = event.target.closest("[data-route]");
-    if (routeButton) { setRoute(routeButton.dataset.route); return; }
+   if (routeButton) {
+  setRoute(routeButton.dataset.route);
+  if (!$("#modalBackdrop").hidden) closeModal();
+  return;
+}
     const actionButton = event.target.closest("[data-action]");
     if (actionButton) { handleAction(actionButton.dataset.action, actionButton); return; }
   });

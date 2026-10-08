@@ -341,12 +341,12 @@ function renderProfile() {
     </div>
 
       <div class="tabs" role="tablist" aria-label="Athlete Passport sections">
-        <button class="tab active" type="button" data-profile-tab="overview">Overview</button>
-        <button class="tab" type="button" data-profile-tab="development">Development</button>
-        <button class="tab" type="button" data-profile-tab="experience">Experience</button>
-        <button class="tab" type="button" data-profile-tab="achievements">Achievements</button>
-        <button class="tab" type="button" data-profile-tab="highlights">Highlights</button>
-      </div>
+       <button class="tab active" type="button" data-action="profile-tab" data-profile-tab="overview">Overview</button>
+      <button class="tab" type="button" data-action="profile-tab" data-profile-tab="development">Development</button>
+      <button class="tab" type="button" data-action="profile-tab" data-profile-tab="experience">Experience</button>
+      <button class="tab" type="button" data-action="profile-tab" data-profile-tab="achievements">Achievements</button>
+      <button class="tab" type="button" data-action="profile-tab" data-profile-tab="highlights">Highlights</button>
+   </div>
 
     <div class="content-grid">
       <div class="stack">
@@ -854,6 +854,9 @@ function saveAndRefresh(message) {
 
 function handleAction(action, target) {
   switch (action) {
+    case "profile-tab":
+  setProfileTab(target.dataset.profileTab);
+  break;
     case "log-training": trainingModal(); break;
     case "add-goal": goalModal(); break;
     case "edit-profile": profileModal(); break;
@@ -931,11 +934,6 @@ if (authTab) {
   return;
 }
         const profileTab = event.target.closest("[data-profile-tab]");
-
-  if (profileTab) {
-    setProfileTab(profileTab.dataset.profileTab);
-    return;
-  }
     
     const routeButton = event.target.closest("[data-route]");
    if (routeButton) {

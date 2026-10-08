@@ -613,10 +613,10 @@ function profileModal() {
     body: `
       <form id="profileForm">
         <div class="form-grid">
-          <div class="field"><label>First name</label><input name="firstName" maxlength="50" value="${escapeHtml(p.firstName)}" required></div>
-          <div class="field"><label>Last name</label><input name="lastName" maxlength="50" value="${escapeHtml(p.lastName)}" required></div>
-         <div class="field"><label>Display name</label><input name="displayName" maxlength="60" value="${escapeHtml(p.displayName || "")}"></div>
-<div class="field"><label>Username</label><input name="username" maxlength="30" value="${escapeHtml(p.username || "")}"></div>
+        <div class="field"><label>First name *</label><input name="firstName" maxlength="50" value="${escapeHtml(p.firstName)}" required></div>
+        <div class="field"><label>Last name *</label><input name="lastName" maxlength="50" value="${escapeHtml(p.lastName)}" required></div>
+        <div class="field"><label>Display name *</label><input name="displayName" maxlength="60" value="${escapeHtml(p.displayName || "")}" required></div>
+        <div class="field"><label>Username *</label><input name="username" maxlength="30" value="${escapeHtml(p.username || "")}" required></div>
 
 <div class="field full">
   <label>Public identity</label>
@@ -639,13 +639,13 @@ function profileModal() {
   </select>
 </div>
 
-<div class="field full"><label>Headline</label><input name="headline" maxlength="100" value="${escapeHtml(p.headline)}" required></div>
+<div class="field full"><label>Headline *</label><input name="headline" maxlength="100" value="${escapeHtml(p.headline)}" required></div>
 <div class="field"><label>City</label><input name="city" maxlength="60" value="${escapeHtml(p.city)}"></div>
 <div class="field"><label>State / province / region</label><input name="region" maxlength="60" value="${escapeHtml(p.region)}"></div>
 <div class="field full"><label>Country</label><input name="country" maxlength="60" value="${escapeHtml(p.country || "")}"></div>
 <div class="field"><label>Primary position</label><input name="primaryPosition" maxlength="50" value="${escapeHtml(p.primaryPosition)}"></div>
 <div class="field"><label>Secondary position</label><input name="secondaryPosition" maxlength="50" value="${escapeHtml(p.secondaryPosition)}"></div>
-<div class="field full"><label>Bio</label><textarea name="bio" maxlength="500">${escapeHtml(p.bio)}</textarea></div>
+<div class="field full"><label>Bio</label><textarea name="bio" maxlength="500" data-char-counter="bio">${escapeHtml(p.bio)}</textarea><div class="char-counter" data-char-counter-output="bio">${String(p.bio || "").length} / 500</div></div>
 </div>
 
 <div class="form-actions">
@@ -778,8 +778,14 @@ if (authTab) {
   });
 
   document.addEventListener("input", event => {
-    if (event.target.matches("#opportunitySearch")) renderOpportunityGrid();
-  });
+  if (event.target.matches("#opportunitySearch")) renderOpportunityGrid();
+
+  const counterKey = event.target.dataset.charCounter;
+  if (counterKey) {
+    const output = document.querySelector(`[data-char-counter-output="${counterKey}"]`);
+    if (output) output.textContent = `${event.target.value.length} / ${event.target.maxLength}`;
+  }
+});
   
   document.addEventListener("change", event => {
     if (event.target.matches("#opportunityTypeFilter")) renderOpportunityGrid();

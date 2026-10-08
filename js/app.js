@@ -285,7 +285,7 @@ function renderDashboard() {
       <div class="stat-card"><span class="label">SAVED OPPORTUNITIES</span><strong>${state.savedOpportunityIds.length}</strong><small>Ready to compare</small></div>
     </div>
 
-    <div class="content-grid">
+    <div class="content-grid profile-tab-panel" data-profile-panel="overview">
       <div class="card">
         <div class="card-header">
           <div><h3>Development snapshot</h3><p class="card-subtitle">Prototype skill categories - self-reported/demo values</p></div>
@@ -340,9 +340,13 @@ function renderProfile() {
       <button class="button purple" data-action="share-demo">Share demo profile</button>
     </div>
 
-    <div class="tabs" role="tablist">
-      <button class="tab active">Overview</button><button class="tab">Development</button><button class="tab">Experience</button><button class="tab">Achievements</button><button class="tab">Highlights</button>
-    </div>
+      <div class="tabs" role="tablist" aria-label="Athlete Passport sections">
+        <button class="tab active" type="button" data-profile-tab="overview">Overview</button>
+        <button class="tab" type="button" data-profile-tab="development">Development</button>
+        <button class="tab" type="button" data-profile-tab="experience">Experience</button>
+        <button class="tab" type="button" data-profile-tab="achievements">Achievements</button>
+        <button class="tab" type="button" data-profile-tab="highlights">Highlights</button>
+      </div>
 
     <div class="content-grid">
       <div class="stack">
@@ -371,7 +375,145 @@ function renderProfile() {
           ${progressBar("Athlete Passport", p.profileCompletion)}
         </div>
       </div>
-    </div>`;
+          </div>
+
+      <div class="card profile-tab-panel" data-profile-panel="development" hidden>
+        <div class="card-header">
+          <div>
+            <h3>Development</h3>
+            <p class="card-subtitle">Your current training and player-development progress.</p>
+          </div>
+        </div>
+
+        <div class="profile-info-grid section-space">
+          <div class="info-cell">
+            <span>Total development</span>
+            <strong>${state.development.totalHours.toFixed(1)}h</strong>
+          </div>
+
+          <div class="info-cell">
+            <span>True-touch hours</span>
+            <strong>${state.development.trueTouchHours.toFixed(1)}h</strong>
+          </div>
+
+          <div class="info-cell">
+            <span>Training sessions</span>
+            <strong>${state.sessions.length}</strong>
+          </div>
+
+          <div class="info-cell">
+            <span>Active goals</span>
+            <strong>${state.goals.length}</strong>
+          </div>
+        </div>
+
+        <div class="section-space">
+          <button class="button primary" type="button" data-route="development">
+            Open full development tracker
+          </button>
+        </div>
+      </div>
+
+      <div class="card profile-tab-panel" data-profile-panel="experience" hidden>
+        <div class="card-header">
+          <div>
+            <h3>Experience</h3>
+            <p class="card-subtitle">Your playing background and current soccer experience.</p>
+          </div>
+        </div>
+
+        <div class="profile-info-grid section-space">
+          <div class="info-cell">
+            <span>Experience level</span>
+            <strong>${escapeHtml(p.experienceLevel)}</strong>
+          </div>
+
+          <div class="info-cell">
+            <span>Primary position</span>
+            <strong>${escapeHtml(p.primaryPosition)}</strong>
+          </div>
+
+          <div class="info-cell">
+            <span>Secondary position</span>
+            <strong>${escapeHtml(p.secondaryPosition)}</strong>
+          </div>
+
+          <div class="info-cell">
+            <span>Availability</span>
+            <strong>${escapeHtml(p.availability)}</strong>
+          </div>
+        </div>
+
+        <p class="bio section-space">
+          A full experience timeline for clubs, leagues, camps, training programs, and other playing history can be built into this section next.
+        </p>
+      </div>
+
+      <div class="card profile-tab-panel" data-profile-panel="achievements" hidden>
+        <div class="card-header">
+          <div>
+            <h3>Achievements</h3>
+            <p class="card-subtitle">Milestones and accomplishments connected to your soccer journey.</p>
+          </div>
+        </div>
+
+        <div class="profile-info-grid section-space">
+          <div class="info-cell">
+            <span>Achievements recorded</span>
+            <strong>${state.achievements.length}</strong>
+          </div>
+
+          <div class="info-cell">
+            <span>Goals tracked</span>
+            <strong>${state.goals.length}</strong>
+          </div>
+        </div>
+
+        <p class="bio section-space">
+          This section will become the dedicated home for awards, milestones, certifications, selections, completed goals, and other accomplishments.
+        </p>
+      </div>
+
+      <div class="card profile-tab-panel" data-profile-panel="highlights" hidden>
+        <div class="card-header">
+          <div>
+            <h3>Highlights</h3>
+            <p class="card-subtitle">Featured moments from your development journey.</p>
+          </div>
+        </div>
+
+        <div class="profile-info-grid section-space">
+          <div class="info-cell">
+            <span>Logged sessions</span>
+            <strong>${state.sessions.length}</strong>
+          </div>
+
+          <div class="info-cell">
+            <span>Profile completion</span>
+            <strong>${p.profileCompletion}%</strong>
+          </div>
+        </div>
+
+        <p class="bio section-space">
+          Video clips, photos, match highlights, training highlights, and featured moments will live here as the media system is added.
+        </p>
+      </div>`;
+}
+
+function setProfileTab(tabName) {
+  const profileView = $("#view-profile");
+  if (!profileView) return;
+
+  $$("[data-profile-tab]", profileView).forEach(button => {
+    const isActive = button.dataset.profileTab === tabName;
+
+    button.classList.toggle("active", isActive);
+    button.setAttribute("aria-selected", String(isActive));
+  });
+
+  $$("[data-profile-panel]", profileView).forEach(panel => {
+    panel.hidden = panel.dataset.profilePanel !== tabName;
+  });
 }
 
 function renderDevelopment() {
@@ -788,6 +930,13 @@ if (authTab) {
   setAuthView(authTab.dataset.authView);
   return;
 }
+        const profileTab = event.target.closest("[data-profile-tab]");
+
+  if (profileTab) {
+    setProfileTab(profileTab.dataset.profileTab);
+    return;
+  }
+    
     const routeButton = event.target.closest("[data-route]");
    if (routeButton) {
   setRoute(routeButton.dataset.route);

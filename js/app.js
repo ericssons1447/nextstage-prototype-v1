@@ -348,7 +348,7 @@ function renderProfile() {
       <button class="tab" type="button" data-action="profile-tab" data-profile-tab="highlights">Highlights</button>
    </div>
 
-    <div class="content-grid">
+  <div class="content-grid profile-tab-panel" data-profile-panel="overview">
       <div class="stack">
         <div class="card"><h3>About</h3><p class="bio">${escapeHtml(p.bio)}</p></div>
         <div class="card">
@@ -377,42 +377,153 @@ function renderProfile() {
       </div>
           </div>
 
-      <div class="card profile-tab-panel" data-profile-panel="development" hidden>
-        <div class="card-header">
-          <div>
-            <h3>Development</h3>
-            <p class="card-subtitle">Your current training and player-development progress.</p>
-          </div>
-        </div>
+     <div class="profile-tab-panel" data-profile-panel="development" hidden>
 
-        <div class="profile-info-grid section-space">
-          <div class="info-cell">
-            <span>Total development</span>
-            <strong>${state.development.totalHours.toFixed(1)}h</strong>
-          </div>
+  <div class="stat-grid">
+    <div class="stat-card">
+      <span class="label">TOTAL DEVELOPMENT</span>
+      <strong>${state.development.totalHours.toFixed(1)}h</strong>
+      <small>All logged activity</small>
+    </div>
 
-          <div class="info-cell">
-            <span>True-touch hours</span>
-            <strong>${state.development.trueTouchHours.toFixed(1)}h</strong>
-          </div>
+    <div class="stat-card">
+      <span class="label">TRUE-TOUCH HOURS</span>
+      <strong>${state.development.trueTouchHours.toFixed(1)}h</strong>
+      <small>Ball-contact focused</small>
+    </div>
 
-          <div class="info-cell">
-            <span>Training sessions</span>
-            <strong>${state.sessions.length}</strong>
-          </div>
+    <div class="stat-card">
+      <span class="label">TRAINING SESSIONS</span>
+      <strong>${state.sessions.length}</strong>
+      <small>Logged sessions</small>
+    </div>
 
-          <div class="info-cell">
-            <span>Active goals</span>
-            <strong>${state.goals.length}</strong>
-          </div>
-        </div>
+    <div class="stat-card">
+      <span class="label">ACTIVE GOALS</span>
+      <strong>${state.goals.length}</strong>
+      <small>Current priorities</small>
+    </div>
+  </div>
 
-        <div class="section-space">
-          <button class="button primary" type="button" data-route="development">
-            Open full development tracker
-          </button>
+  <div class="content-grid equal section-space">
+
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <h3>Skill progress</h3>
+          <p class="card-subtitle">
+            Current prototype development categories
+          </p>
         </div>
       </div>
+
+      ${state.development.categories
+        .map(x => progressBar(x.name, x.score))
+        .join("")}
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <h3>Current goals</h3>
+          <p class="card-subtitle">
+            The next development priorities
+          </p>
+        </div>
+
+        <button
+          class="button amber small"
+          data-action="add-goal"
+        >
+          ＋ Goal
+        </button>
+      </div>
+
+      <div class="goal-list">
+        ${state.goals.slice(0, 3).map(goal => `
+          <div class="goal-card">
+            <h4>${escapeHtml(goal.title)}</h4>
+            <p>${escapeHtml(goal.detail)}</p>
+
+            <div class="progress-track" style="margin-top:10px">
+              <div
+                class="progress-fill"
+                style="width:${goal.progress}%"
+              ></div>
+            </div>
+          </div>
+        `).join("")}
+      </div>
+    </div>
+
+  </div>
+
+  <div class="content-grid section-space">
+
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <h3>Recent training</h3>
+          <p class="card-subtitle">
+            Your latest development activity
+          </p>
+        </div>
+      </div>
+
+      <div class="activity-list">
+        ${state.sessions.slice(0, 3).map(session => `
+          <div class="activity-item">
+            <div class="activity-icon">⚽</div>
+
+            <div class="activity-copy">
+              <strong>${escapeHtml(session.type)}</strong>
+              <span>
+                ${formatDate(session.date)} ·
+                ${escapeHtml(session.focus)}
+              </span>
+            </div>
+
+            <button
+              class="button blue small"
+              data-session-id="${session.id}"
+              data-action="session-detail"
+            >
+              View
+            </button>
+          </div>
+        `).join("")}
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Development actions</h3>
+
+      <p class="bio">
+        Continue tracking development or open the complete
+        Development workspace for the full training log,
+        goals, skill categories, and activity history.
+      </p>
+
+      <div class="card-actions section-space">
+        <button
+          class="button primary"
+          data-action="log-training"
+        >
+          ＋ Log training
+        </button>
+
+        <button
+          class="button blue"
+          data-route="development"
+        >
+          Open full tracker
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+</div>
 
       <div class="card profile-tab-panel" data-profile-panel="experience" hidden>
         <div class="card-header">

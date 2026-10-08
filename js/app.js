@@ -267,7 +267,7 @@ function renderDashboard() {
           <p>${escapeHtml(p.headline)}. Prototype V1 is designed to demonstrate how development, exposure, and opportunity discovery could live in one place.</p>
           <div class="hero-actions">
             <button class="button primary" data-action="log-training">＋ Log training</button>
-            <button class="button ghost" data-route="discover">Discover opportunities</button>
+            <button class="button blue" data-route="discover">Discover opportunities</button>
           </div>
         </div>
         <div class="hero-score">
@@ -289,14 +289,14 @@ function renderDashboard() {
       <div class="card">
         <div class="card-header">
           <div><h3>Development snapshot</h3><p class="card-subtitle">Prototype skill categories - self-reported/demo values</p></div>
-          <button class="button secondary small" data-route="development">Open tracker</button>
+          <button class="button blue small" data-route="development">Open tracker</button>
         </div>
         ${d.categories.map(x => progressBar(x.name, x.score)).join("")}
       </div>
 
       <div class="stack">
         <div class="card">
-          <div class="card-header"><div><h3>Current goals</h3><p class="card-subtitle">Keep the next steps visible</p></div><button class="button soft small" data-action="add-goal">＋ Goal</button></div>
+          <div class="card-header"><div><h3>Current goals</h3><p class="card-subtitle">Keep the next steps visible</p></div><button class="button amber small" data-action="add-goal">＋ Goal</button></div>
           <div class="goal-list">
             ${state.goals.slice(0, 2).map(goal => `
               <div class="goal-card">
@@ -328,7 +328,7 @@ function renderProfile() {
   const p = state.profile;
  const publicIdentity = getPublicIdentityText(p);
   view.innerHTML = `
-    ${pageHead("Athlete Passport", "Your soccer identity, in one profile", "Prototype of an athlete-controlled profile designed to show development, experience, goals, and verified accomplishments over time.", `<button class="button secondary" data-action="edit-profile">Edit profile</button>`)}
+    ${pageHead("Athlete Passport", "Your soccer identity, in one profile", "Prototype of an athlete-controlled profile designed to show development, experience, goals, and verified accomplishments over time.", `<button class="button navy" data-action="edit-profile">Edit profile</button>`)}
 
     <div class="card profile-hero">
       <div class="profile-avatar">${escapeHtml(p.initials)}</div>
@@ -337,7 +337,7 @@ function renderProfile() {
         <p>${escapeHtml(p.headline)}</p>
         <div class="tag-row"><span class="tag green">${escapeHtml(p.primaryPosition)}</span><span class="tag">${escapeHtml(p.experienceLevel)}</span><span class="tag blue">${escapeHtml(p.city)}, ${escapeHtml(p.region)}</span></div>
       </div>
-      <button class="button soft" data-action="share-demo">Share demo profile</button>
+      <button class="button purple" data-action="share-demo">Share demo profile</button>
     </div>
 
     <div class="tabs" role="tablist">
@@ -408,16 +408,16 @@ function renderDevelopment() {
             <div class="activity-item">
               <div class="activity-icon">↗</div>
               <div class="activity-copy"><strong>${escapeHtml(s.type)} · ${s.minutes} min</strong><span>${formatDate(s.date)} · ${escapeHtml(s.focus)} · ${s.trueTouchMinutes} true-touch min</span></div>
-              <button class="button secondary small" data-session-id="${s.id}" data-action="session-detail">View</button>
+              <button class="button blue small" data-session-id="${s.id}" data-action="session-detail">View</button>
             </div>`).join("")}
         </div>
       </div>
       <div class="card">
-        <div class="card-header"><div><h3>Goals</h3><p class="card-subtitle">Turn broad ambitions into visible next steps</p></div><button class="button soft small" data-action="add-goal">＋ Add</button></div>
+        <div class="card-header"><div><h3>Goals</h3><p class="card-subtitle">Turn broad ambitions into visible next steps</p></div><button class="button amber small" data-action="add-goal">＋ Add</button></div>
         <div class="goal-list">
           ${state.goals.map(g => `
             <div class="goal-card">
-              <div class="goal-top"><div><h4>${escapeHtml(g.title)}</h4><p>${escapeHtml(g.target)} · ${escapeHtml(g.detail)}</p></div><div class="goal-actions"><button class="button secondary small" data-action="advance-goal" data-goal-id="${g.id}">+10%</button></div></div>
+              <div class="goal-top"><div><h4>${escapeHtml(g.title)}</h4><p>${escapeHtml(g.target)} · ${escapeHtml(g.detail)}</p></div><div class="goal-actions"><button class="button primary small" data-action="advance-goal" data-goal-id="${g.id}">+10%</button></div></div>
               <div class="progress-track" style="margin-top:10px"><div class="progress-fill" style="width:${g.progress}%"></div></div>
             </div>`).join("")}
         </div>
@@ -461,7 +461,7 @@ function opportunityCard(o) {
       <div class="meta-line"><span>⌖ ${escapeHtml(o.city)}</span><span>◫ ${escapeHtml(o.level)}</span><span>◷ ${escapeHtml(o.schedule)}</span><span>${escapeHtml(o.cost)}</span></div>
       <p>${escapeHtml(o.description)}</p>
       <div class="tag-row">${o.tags.map(t => `<span class="tag">${escapeHtml(t)}</span>`).join("")}</div>
-      <div class="card-actions"><button class="button primary small" data-action="opportunity-detail" data-opportunity-id="${o.id}">View details</button><button class="button secondary small" data-action="prototype-contact">Contact / Join</button></div>
+      <button class="button blue small" data-action="opportunity-detail" data-opportunity-id="${o.id}">View details</button><button class="button purple small" data-action="prototype-contact">Contact / Join</button>></div>
     </article>`;
 }
 
@@ -476,7 +476,7 @@ function renderCoach() {
       <div class="profile-hero">
         <div class="profile-avatar" style="background:#153957">${escapeHtml(p.initials)}</div>
         <div class="profile-name"><h2>${escapeHtml(publicIdentity)}</h2><p>${escapeHtml(p.headline)}</p><div class="tag-row"><span class="tag green">${escapeHtml(p.primaryPosition)}</span><span class="tag blue">${escapeHtml(p.city)}, ${escapeHtml(p.region)}</span></div></div>
-        <button class="button ghost" data-action="prototype-contact">Request contact</button>
+        <button class="button purple" data-action="prototype-contact">Request contact</button>
       </div>
       <div class="scout-metrics">
         <div class="scout-metric"><strong>${d.totalHours.toFixed(1)}h</strong><span>Tracked development</span></div>
@@ -488,7 +488,7 @@ function renderCoach() {
       <div class="card"><div class="card-header"><div><h3>Development evidence</h3><p class="card-subtitle">Athlete-controlled prototype information</p></div></div>${d.categories.map(x => progressBar(x.name, x.score)).join("")}</div>
       <div class="stack">
         <div class="card"><h3>What the athlete says</h3><p class="bio">${escapeHtml(p.bio)}</p></div>
-        <div class="card"><h3>Coach / scout notes</h3><p class="bio">${escapeHtml(state.notes.coach)}</p><button class="button secondary small" data-action="prototype-note">Add private note</button></div>
+        <div class="card"><h3>Coach / scout notes</h3><p class="bio">${escapeHtml(state.notes.coach)}</p><button class="button navy small" data-action="prototype-note">Add private note</button></div>
       </div>
     </div>
     <div class="notice info section-space">Production design should include athlete consent, visibility controls, verification indicators, safeguarding, reporting, and careful rules for minors before real recruiting or messaging features are enabled.</div>`;
@@ -499,7 +499,7 @@ function renderSaved() {
   const saved = state.opportunities.filter(o => state.savedOpportunityIds.includes(o.id));
   view.innerHTML = `
     ${pageHead("Saved", "Keep promising opportunities together", "Compare options without losing them in screenshots, bookmarks, or messages.")}
-    <div class="opportunity-grid">${saved.length ? saved.map(opportunityCard).join("") : `<div class="empty-state"><div class="empty-icon">♡</div><strong>No saved opportunities yet.</strong><p>Open Discover and tap the heart on a demo listing.</p><button class="button primary" data-route="discover">Open Discover</button></div>`}</div>`;
+    <div class="opportunity-grid">${saved.length ? saved.map(opportunityCard).join("") : `<div class="empty-state"><div class="empty-icon">♡</div><strong>No saved opportunities yet.</strong><p>Open Discover and tap the heart on a demo listing.</p><button class="button blue" data-route="discover">Open Discover</button></div>`}</div>`;
 }
 
 function renderSettings() {

@@ -158,6 +158,27 @@ function getPublicIdentityText(profile) {
   return selected.filter(Boolean).join(" · ");
 }
 
+function initializeCharacterCounters(root = document) {
+  const fields = root.querySelectorAll(
+    'input[maxlength]:not([type="password"]):not([type="email"]):not([type="search"]), textarea[maxlength]'
+  );
+
+  fields.forEach((field, index) => {
+    if (field.dataset.counterReady === "true") return;
+
+    const maxLength = Number(field.maxLength);
+    if (!maxLength || maxLength < 100) return;
+
+    field.dataset.counterReady = "true";
+
+    const counter = document.createElement("div");
+    counter.className = "char-counter";
+    counter.textContent = `${field.value.length} / ${maxLength}`;
+
+    field.insertAdjacentElement("afterend", counter);
+  });
+}
+
 function showToast(message) {
   const toast = $("#toast");
   toast.textContent = message;
@@ -780,11 +801,11 @@ if (authTab) {
   document.addEventListener("input", event => {
   if (event.target.matches("#opportunitySearch")) renderOpportunityGrid();
 
-  const counterKey = event.target.dataset.charCounter;
-  if (counterKey) {
-    const output = document.querySelector(`[data-char-counter-output="${counterKey}"]`);
-    if (output) output.textContent = `${event.target.value.length} / ${event.target.maxLength}`;
-  }
+  const counter = event.target.nextElementSibling;
+
+if (counter?.classList.contains("char-counter")) {
+  counter.textContent = `${event.target.value.length} / ${event.target.maxLength}`;
+}    
 });
   
   document.addEventListener("change", event => {

@@ -133,6 +133,41 @@ a { color: inherit; }
 .button.ghost { background: rgba(255,255,255,.1); color: white; border: 1px solid rgba(255,255,255,.16); }
 .button.soft { background: #eaf7ef; color: #15673e; }
 .button.danger { background: #fff0ee; color: var(--danger); }
+.button.blue {
+  background: #e9f2ff;
+  color: #1e5ba7;
+}
+
+.button.blue:hover {
+  background: #d9eaff;
+}
+
+.button.navy {
+  background: var(--navy);
+  color: white;
+}
+
+.button.navy:hover {
+  background: var(--navy-2);
+}
+
+.button.purple {
+  background: #f0eaff;
+  color: #6941c6;
+}
+
+.button.purple:hover {
+  background: #e5d9ff;
+}
+
+.button.amber {
+  background: #fff4dc;
+  color: #945d00;
+}
+
+.button.amber:hover {
+  background: #ffe9b8;
+}
 .button.small { padding: 8px 11px; font-size: 13px; border-radius: 10px; }
 .button:disabled { opacity: .48; cursor: not-allowed; }
 
@@ -187,10 +222,41 @@ a { color: inherit; }
 .info-cell span { color: var(--muted); font-size: 11px; display: block; text-transform: uppercase; letter-spacing: .08em; font-weight: 800; }
 .info-cell strong { display: block; margin-top: 4px; }
 
-.tabs { display: flex; overflow-x: auto; gap: 4px; padding: 5px; background: var(--surface-3); border-radius: 13px; margin: 18px 0; scrollbar-width: none; }
-.tabs::-webkit-scrollbar { display:none; }
-.tab { border: 0; background: transparent; border-radius: 10px; padding: 9px 12px; white-space: nowrap; color: var(--muted); font-weight: 750; }
-.tab.active { background: white; color: var(--ink); box-shadow: 0 2px 8px rgba(17,32,54,.06); }
+.tabs {
+  display: flex;
+  overflow-x: auto;
+  gap: 6px;
+  padding: 6px;
+  background: linear-gradient(135deg, var(--navy), var(--navy-2));
+  border-radius: 15px;
+  margin: 18px 0;
+  scrollbar-width: none;
+  box-shadow: 0 8px 24px rgba(11,31,51,.12);
+}
+
+.tabs::-webkit-scrollbar { display: none; }
+
+.tab {
+  border: 0;
+  background: transparent;
+  border-radius: 10px;
+  padding: 10px 14px;
+  white-space: nowrap;
+  color: rgba(255,255,255,.72);
+  font-weight: 800;
+  transition: .18s ease;
+}
+
+.tab:hover {
+  background: rgba(255,255,255,.10);
+  color: white;
+}
+
+.tab.active {
+  background: var(--green);
+  color: #052417;
+  box-shadow: 0 4px 14px rgba(40,180,99,.28);
+}
 
 .chart-bars { height: 180px; display: flex; align-items: end; gap: 10px; padding-top: 12px; }
 .bar-wrap { flex: 1; text-align: center; min-width: 28px; }

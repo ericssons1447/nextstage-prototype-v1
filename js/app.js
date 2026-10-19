@@ -961,7 +961,7 @@ function renderProfile() {
 
   </div>
 
-</div>
+</div>`;
 }
 
 function setProfileTab(tabName) {

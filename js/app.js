@@ -817,30 +817,151 @@ function renderProfile() {
 
 </div>
 
-      <div class="card profile-tab-panel" data-profile-panel="highlights" hidden>
-        <div class="card-header">
-          <div>
-            <h3>Highlights</h3>
-            <p class="card-subtitle">Featured moments from your development journey.</p>
-          </div>
-        </div>
+   <div class="profile-tab-panel" data-profile-panel="highlights" hidden>
 
-        <div class="profile-info-grid section-space">
-          <div class="info-cell">
-            <span>Logged sessions</span>
-            <strong>${state.sessions.length}</strong>
-          </div>
+  <div class="stat-grid">
 
-          <div class="info-cell">
-            <span>Profile completion</span>
-            <strong>${p.profileCompletion}%</strong>
-          </div>
+    <div class="stat-card">
+      <span class="label">HIGHLIGHTS</span>
+      <strong>${state.highlights.length}</strong>
+      <small>Featured moments</small>
+    </div>
+
+    <div class="stat-card">
+      <span class="label">VIDEOS</span>
+      <strong>${state.highlights.filter(item => item.mediaType === "Video").length}</strong>
+      <small>Video highlights</small>
+    </div>
+
+    <div class="stat-card">
+      <span class="label">PHOTOS</span>
+      <strong>${state.highlights.filter(item => item.mediaType === "Photo").length}</strong>
+      <small>Photo highlights</small>
+    </div>
+
+    <div class="stat-card">
+      <span class="label">HIGHLIGHT TYPES</span>
+      <strong>${new Set(state.highlights.map(item => item.type)).size}</strong>
+      <small>Different categories</small>
+    </div>
+
+  </div>
+
+  <div class="content-grid section-space">
+
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <h3>Highlight collection</h3>
+          <p class="card-subtitle">
+            Videos, photos, match moments, training clips, milestones,
+            and other featured parts of your journey.
+          </p>
         </div>
+      </div>
+
+      <div class="simple-list">
+
+        ${[...state.highlights]
+          .sort((a, b) => new Date(b.date) - new Date(a.date))
+          .map(item => `
+            <div class="simple-item">
+
+              <div class="activity-icon">
+                ${item.mediaType === "Video" ? "▶" : "▧"}
+              </div>
+
+              <div class="activity-copy">
+
+                <strong>${escapeHtml(item.title)}</strong>
+
+                <span>
+                  ${escapeHtml(item.mediaType)} ·
+                  ${escapeHtml(item.type)} ·
+                  ${formatDate(item.date)}
+                </span>
+
+                <span>
+                  ${escapeHtml(item.source)}
+                </span>
+
+                <p class="bio" style="margin:8px 0 0;">
+                  ${escapeHtml(item.description)}
+                </p>
+
+                ${item.url ? `
+                  <div class="section-space">
+                    <a
+                      class="button blue small"
+                      href="${escapeHtml(item.url)}"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Open highlight ↗
+                    </a>
+                  </div>
+                ` : `
+                  <div class="section-space">
+                    <span class="tag">
+                      Prototype media placeholder
+                    </span>
+                  </div>
+                `}
+
+              </div>
+
+            </div>
+          `).join("")}
+
+      </div>
+    </div>
+
+    <div class="stack">
+
+      <div class="card">
+        <h3>Highlight categories</h3>
 
         <p class="bio section-space">
-          Video clips, photos, match highlights, training highlights, and featured moments will live here as the media system is added.
+          Athletes can use Highlights to feature different parts of their
+          development and playing journey.
         </p>
-      </div>`;
+
+        <div class="tag-row section-space">
+          <span class="tag green">Training</span>
+          <span class="tag blue">Games</span>
+          <span class="tag">Development</span>
+          <span class="tag">Milestones</span>
+          <span class="tag">Skills</span>
+          <span class="tag">Achievements</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Media in Prototype V1</h3>
+
+        <p class="bio section-space">
+          Prototype V1 stores highlight information and optional external
+          links rather than uploading large video or photo files directly
+          into the browser.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>Athlete-controlled presentation</h3>
+
+        <p class="bio section-space">
+          Highlights are intended to help athletes choose the moments that
+          best represent their development, experience, progress, and
+          accomplishments instead of automatically exposing everything
+          they record.
+        </p>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
 }
 
 function setProfileTab(tabName) {

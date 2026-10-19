@@ -212,9 +212,18 @@ a { color: inherit; }
 .card-subtitle { color: var(--muted); font-size: 13px; margin: 0; }
 .card-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 16px; }
 
-.content-grid { display: grid; grid-template-columns: 1.35fr .65fr; gap: 18px; }
+.content-grid {
+  display: grid;
+  grid-template-columns: 1.35fr .65fr;
+  gap: 18px;
+  align-items: start;
+}
 .content-grid.equal { grid-template-columns: 1fr 1fr; }
-.stack { display: grid; gap: 14px; }
+.stack {
+  display: grid;
+  gap: 14px;
+  align-content: start;
+}
 .section-space { margin-top: 18px; }
 
 .progress-row { display: grid; gap: 8px; margin: 14px 0; }

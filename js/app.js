@@ -850,15 +850,23 @@ function renderProfile() {
   <div class="content-grid section-space">
 
     <div class="card">
-      <div class="card-header">
-        <div>
-          <h3>Highlight collection</h3>
-          <p class="card-subtitle">
-            Videos, photos, match moments, training clips, milestones,
-            and other featured parts of your journey.
-          </p>
-        </div>
-      </div>
+     <div class="card-header">
+  <div>
+    <h3>Highlight collection</h3>
+    <p class="card-subtitle">
+      Videos, photos, match moments, training clips, milestones,
+      and other featured parts of your journey.
+    </p>
+  </div>
+
+  <button
+    class="button primary small"
+    type="button"
+    data-action="add-highlight"
+  >
+    ＋ Add highlight
+  </button>
+</div>
 
       <div class="simple-list">
 
@@ -1215,6 +1223,117 @@ const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0"
   });
 }
 
+function highlightModal() {
+  const now = new Date();
+  const today =
+    `${now.getFullYear()}-` +
+    `${String(now.getMonth() + 1).padStart(2, "0")}-` +
+    `${String(now.getDate()).padStart(2, "0")}`;
+
+  openModal({
+    eyebrow: "Athlete Passport",
+    title: "Add highlight",
+    body: `
+      <form id="highlightForm">
+        <div class="form-grid">
+
+          <div class="field">
+            <label>Highlight type *</label>
+            <select name="type" required>
+              <option value="">Choose type</option>
+              <option>Training</option>
+              <option>Game</option>
+              <option>Development</option>
+              <option>Milestone</option>
+              <option>Skill</option>
+              <option>Achievement</option>
+              <option>Other</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>Media type *</label>
+            <select name="mediaType" required>
+              <option value="">Choose media</option>
+              <option>Video</option>
+              <option>Photo</option>
+            </select>
+          </div>
+
+          <div class="field full">
+            <label>Highlight title *</label>
+            <input
+              name="title"
+              maxlength="120"
+              placeholder="Example: First Adult League Goal"
+              required
+            />
+          </div>
+
+          <div class="field">
+            <label>Date *</label>
+            <input
+              name="date"
+              type="date"
+              value="${today}"
+              required
+            />
+          </div>
+
+          <div class="field">
+            <label>Source</label>
+            <input
+              name="source"
+              maxlength="100"
+              placeholder="Example: Adult league match"
+            />
+          </div>
+
+          <div class="field full">
+            <label>External media link</label>
+            <input
+              name="url"
+              type="url"
+              maxlength="500"
+              placeholder="https://..."
+            />
+            <small>
+              Optional. Prototype V1 links to external media instead of uploading large files.
+            </small>
+          </div>
+
+          <div class="field full">
+            <label>Description *</label>
+            <textarea
+              name="description"
+              maxlength="500"
+              placeholder="Describe what this highlight shows and why it matters."
+              required
+            ></textarea>
+          </div>
+
+        </div>
+
+        <div class="form-actions">
+          <button
+            type="button"
+            class="button secondary"
+            data-action="close-modal"
+          >
+            Cancel
+          </button>
+
+          <button
+            class="button primary"
+            type="submit"
+          >
+            Add highlight
+          </button>
+        </div>
+      </form>`
+  });
+}
+
 function achievementModal() {
   const now = new Date();
   const today =
@@ -1546,6 +1665,7 @@ function handleAction(action, target) {
     case "add-goal": goalModal(); break;
     case "add-experience": experienceModal(); break;
     case "add-achievement": achievementModal(); break;
+    case "add-highlight": highlightModal(); break;
     case "edit-profile": profileModal(); break;
     case "close-modal": closeModal(); break;
     case "mobile-more": mobileMoreModal(); break;
@@ -1673,6 +1793,36 @@ if (counter?.classList.contains("char-counter")) {
       state.weeklyHours[state.weeklyHours.length - 1].hours = state.development.currentWeekHours;
       saveState(state); closeModal(); renderRoute(activeRoute); showToast("Training session logged.");
     }
+
+    if (event.target.id === "highlightForm") {
+  event.preventDefault();
+
+  const form = new FormData(event.target);
+  const url = String(form.get("url") || "").trim();
+
+  if (url && !/^https?:\/\//i.test(url)) {
+    showToast("Highlight links must start with http:// or https://.");
+    return;
+  }
+
+  state.highlights.unshift({
+    id: `h${Date.now()}`,
+    type: String(form.get("type") || ""),
+    mediaType: String(form.get("mediaType") || ""),
+    title: String(form.get("title") || ""),
+    date: String(form.get("date") || ""),
+    source: String(form.get("source") || "Athlete-added highlight"),
+    description: String(form.get("description") || ""),
+    url
+  });
+
+  saveState(state);
+  closeModal();
+  renderRoute(activeRoute);
+  setProfileTab("highlights");
+  showToast("Highlight added.");
+  return;
+}
 
     if (event.target.id === "achievementForm") {
   event.preventDefault();

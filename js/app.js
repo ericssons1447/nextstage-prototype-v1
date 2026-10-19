@@ -421,14 +421,22 @@ function renderProfile() {
   <div class="content-grid equal section-space">
 
     <div class="card">
-      <div class="card-header">
-        <div>
-          <h3>Skill progress</h3>
-          <p class="card-subtitle">
-            Current prototype development categories
-          </p>
-        </div>
-      </div>
+     <div class="card-header">
+  <div>
+    <h3>Experience timeline</h3>
+    <p class="card-subtitle">
+      Teams, leagues, training, open play, camps, programs, and other soccer experience.
+    </p>
+  </div>
+
+  <button
+    class="button primary small"
+    type="button"
+    data-action="add-experience"
+  >
+    ＋ Add experience
+  </button>
+</div>
 
       ${state.development.categories
         .map(x => progressBar(x.name, x.score))
@@ -975,6 +983,132 @@ const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0"
   });
 }
 
+function experienceModal() {
+  openModal({
+    eyebrow: "Athlete Passport",
+    title: "Add experience",
+    body: `
+      <form id="experienceForm">
+        <div class="form-grid">
+
+          <div class="field">
+            <label>Experience type *</label>
+            <select name="type" required>
+              <option value="">Choose type</option>
+              <option>Team</option>
+              <option>Club</option>
+              <option>League</option>
+              <option>School</option>
+              <option>Academy</option>
+              <option>Training Program</option>
+              <option>Camp</option>
+              <option>Clinic</option>
+              <option>Open Play</option>
+              <option>Pickup</option>
+              <option>Tournament</option>
+              <option>Independent Development</option>
+              <option>Other</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>Role *</label>
+            <input
+              name="role"
+              maxlength="60"
+              value="Player"
+              required
+            />
+          </div>
+
+          <div class="field full">
+            <label>Experience title *</label>
+            <input
+              name="title"
+              maxlength="100"
+              placeholder="Example: Adult Indoor League"
+              required
+            />
+          </div>
+
+          <div class="field full">
+            <label>Organization *</label>
+            <input
+              name="organization"
+              maxlength="100"
+              placeholder="Example: West Michigan Soccer Club"
+              required
+            />
+          </div>
+
+          <div class="field">
+            <label>Location</label>
+            <input
+              name="location"
+              maxlength="100"
+              placeholder="Example: Grand Rapids, MI"
+            />
+          </div>
+
+          <div class="field">
+            <label>Level</label>
+            <input
+              name="level"
+              maxlength="80"
+              placeholder="Example: Recreational"
+            />
+          </div>
+
+          <div class="field">
+            <label>Start month *</label>
+            <input
+              name="startDate"
+              type="month"
+              required
+            />
+          </div>
+
+          <div class="field">
+            <label>End month</label>
+            <input
+              name="endDate"
+              type="month"
+            />
+            <small>Leave blank if this experience is still current.</small>
+          </div>
+
+          <div class="field full">
+            <label>Description *</label>
+            <textarea
+              name="description"
+              maxlength="500"
+              placeholder="Describe what you did, learned, or accomplished during this experience."
+              required
+            ></textarea>
+          </div>
+
+        </div>
+
+        <div class="form-actions">
+          <button
+            type="button"
+            class="button secondary"
+            data-action="close-modal"
+          >
+            Cancel
+          </button>
+
+          <button
+            class="button primary"
+            type="submit"
+          >
+            Add experience
+          </button>
+        </div>
+      </form>`
+  });
+}
+
 function goalModal() {
   openModal({
     eyebrow: "Development goals",
@@ -1083,6 +1217,7 @@ function handleAction(action, target) {
   break;
     case "log-training": trainingModal(); break;
     case "add-goal": goalModal(); break;
+    case "add-experience": experienceModal(); break;
     case "edit-profile": profileModal(); break;
     case "close-modal": closeModal(); break;
     case "mobile-more": mobileMoreModal(); break;
@@ -1210,6 +1345,32 @@ if (counter?.classList.contains("char-counter")) {
       state.weeklyHours[state.weeklyHours.length - 1].hours = state.development.currentWeekHours;
       saveState(state); closeModal(); renderRoute(activeRoute); showToast("Training session logged.");
     }
+
+    if (event.target.id === "experienceForm") {
+  event.preventDefault();
+
+  const form = new FormData(event.target);
+
+  state.experiences.unshift({
+    id: `e${Date.now()}`,
+    type: String(form.get("type") || ""),
+    title: String(form.get("title") || ""),
+    organization: String(form.get("organization") || ""),
+    location: String(form.get("location") || "Location not listed"),
+    startDate: String(form.get("startDate") || ""),
+    endDate: String(form.get("endDate") || "") || "Present",
+    role: String(form.get("role") || "Player"),
+    level: String(form.get("level") || "Not specified"),
+    description: String(form.get("description") || "")
+  });
+
+  saveState(state);
+  closeModal();
+  renderRoute(activeRoute);
+  setProfileTab("experience");
+  showToast("Experience added.");
+  return;
+}
 
     if (event.target.id === "goalForm") {
       event.preventDefault();

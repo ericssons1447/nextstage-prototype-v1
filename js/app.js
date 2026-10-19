@@ -722,30 +722,48 @@ function renderProfile() {
   <div class="content-grid section-space">
 
     <div class="card">
-      <div class="card-header">
-        <div>
-          <h3>Achievement timeline</h3>
-          <p class="card-subtitle">
-            Milestones, awards, certifications, selections, completed goals,
-            and other accomplishments.
-          </p>
-        </div>
-      </div>
+    <div class="card-header">
+  <div>
+    <h3>Achievement timeline</h3>
+    <p class="card-subtitle">
+      Milestones, awards, certifications, selections, completed goals,
+      and other accomplishments.
+    </p>
+  </div>
 
-      <div class="simple-list">
+  <button
+    class="button primary small"
+    type="button"
+    data-action="add-achievement"
+  >
+    ＋ Add achievement
+  </button>
+</div>
+
+<div class="simple-list">
         ${[...state.achievements]
           .sort((a, b) => new Date(b.date) - new Date(a.date))
           .map(item => `
             <div class="simple-item">
               <div class="activity-icon">★</div>
 
-              <div class="activity-copy">
-                <strong>${escapeHtml(item.title)}</strong>
+             <div class="activity-copy">
+  <strong>${escapeHtml(item.title)}</strong>
 
-                <span>
-                  ${escapeHtml(item.type)} · ${formatDate(item.date)}
-                </span>
-              </div>
+  <span>
+    ${escapeHtml(item.type)} · ${formatDate(item.date)}
+  </span>
+
+  ${item.organization ? `
+    <span>${escapeHtml(item.organization)}</span>
+  ` : ""}
+
+  ${item.description ? `
+    <p class="bio" style="margin:8px 0 0;">
+      ${escapeHtml(item.description)}
+    </p>
+  ` : ""}
+</div>
             </div>
           `).join("")}
       </div>
@@ -1076,6 +1094,101 @@ const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0"
   });
 }
 
+function achievementModal() {
+  const now = new Date();
+  const today =
+    `${now.getFullYear()}-` +
+    `${String(now.getMonth() + 1).padStart(2, "0")}-` +
+    `${String(now.getDate()).padStart(2, "0")}`;
+
+  openModal({
+    eyebrow: "Athlete Passport",
+    title: "Add achievement",
+    body: `
+      <form id="achievementForm">
+        <div class="form-grid">
+
+          <div class="field">
+            <label>Achievement type *</label>
+            <select name="type" required>
+              <option value="">Choose type</option>
+              <option>Milestone</option>
+              <option>Award</option>
+              <option>Certification</option>
+              <option>Selection</option>
+              <option>Completed Goal</option>
+              <option>Consistency</option>
+              <option>Profile</option>
+              <option>Participation</option>
+              <option>Recognition</option>
+              <option>Other</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>Date *</label>
+            <input
+              name="date"
+              type="date"
+              value="${today}"
+              required
+            />
+          </div>
+
+          <div class="field full">
+            <label>Achievement title *</label>
+            <input
+              name="title"
+              maxlength="120"
+              placeholder="Example: Completed First Adult League Season"
+              required
+            />
+          </div>
+
+          <div class="field full">
+            <label>Organization or source</label>
+            <input
+              name="organization"
+              maxlength="100"
+              placeholder="Example: NextStage milestone, league, club, school, trainer"
+            />
+          </div>
+
+          <div class="field full">
+            <label>Details</label>
+            <textarea
+              name="description"
+              maxlength="500"
+              placeholder="Optional details about what this achievement represents."
+            ></textarea>
+          </div>
+
+        </div>
+
+        <div class="notice info section-space">
+          Prototype V1 achievements are athlete-entered and are not independently verified.
+        </div>
+
+        <div class="form-actions">
+          <button
+            type="button"
+            class="button secondary"
+            data-action="close-modal"
+          >
+            Cancel
+          </button>
+
+          <button
+            class="button primary"
+            type="submit"
+          >
+            Add achievement
+          </button>
+        </div>
+      </form>`
+  });
+}
+
 function experienceModal() {
   openModal({
     eyebrow: "Athlete Passport",
@@ -1311,6 +1424,7 @@ function handleAction(action, target) {
     case "log-training": trainingModal(); break;
     case "add-goal": goalModal(); break;
     case "add-experience": experienceModal(); break;
+    case "add-achievement": achievementModal(); break;
     case "edit-profile": profileModal(); break;
     case "close-modal": closeModal(); break;
     case "mobile-more": mobileMoreModal(); break;
@@ -1438,6 +1552,29 @@ if (counter?.classList.contains("char-counter")) {
       state.weeklyHours[state.weeklyHours.length - 1].hours = state.development.currentWeekHours;
       saveState(state); closeModal(); renderRoute(activeRoute); showToast("Training session logged.");
     }
+
+    if (event.target.id === "achievementForm") {
+  event.preventDefault();
+
+  const form = new FormData(event.target);
+
+  state.achievements.unshift({
+    id: `a${Date.now()}`,
+    title: String(form.get("title") || ""),
+    type: String(form.get("type") || ""),
+    date: String(form.get("date") || ""),
+    organization: String(form.get("organization") || ""),
+    description: String(form.get("description") || ""),
+    verification: "Athlete-entered"
+  });
+
+  saveState(state);
+  closeModal();
+  renderRoute(activeRoute);
+  setProfileTab("achievements");
+  showToast("Achievement added.");
+  return;
+}
 
     if (event.target.id === "experienceForm") {
   event.preventDefault();

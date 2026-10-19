@@ -359,6 +359,14 @@ function renderProfile() {
       <button class="tab" type="button" data-action="profile-tab" data-profile-tab="experience">Experience</button>
       <button class="tab" type="button" data-action="profile-tab" data-profile-tab="achievements">Achievements</button>
       <button class="tab" type="button" data-action="profile-tab" data-profile-tab="highlights">Highlights</button>
+      <button
+    class="tab"
+    type="button"
+    data-action="profile-tab"
+    data-profile-tab="all"
+>
+  View All
+</button>
    </div>
 
   <div class="content-grid profile-tab-panel" data-profile-panel="overview">
@@ -983,9 +991,13 @@ function setProfileTab(tabName) {
     button.setAttribute("aria-selected", String(isActive));
   });
 
-  $$("[data-profile-panel]", profileView).forEach(panel => {
-    panel.hidden = panel.dataset.profilePanel !== tabName;
-  });
+ const showAll = tabName === "all";
+
+$$("[data-profile-panel]", profileView).forEach(panel => {
+  panel.hidden =
+    !showAll &&
+    panel.dataset.profilePanel !== tabName;
+});
 }
 
 function renderDevelopment() {

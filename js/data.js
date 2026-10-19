@@ -101,6 +101,39 @@ export const DEFAULT_STATE = {
     description: "Independent technical practice, fitness work, tactical learning, and preparation for organized team opportunities."
   }
 ],
+
+  highlights: [
+  {
+    id: "h1",
+    type: "Training",
+    mediaType: "Video",
+    title: "First-Touch Development",
+    date: "2026-10-03",
+    source: "Individual technical session",
+    description: "Prototype highlight showing progress in first touch, receiving angles, and short passing.",
+    url: ""
+  },
+  {
+    id: "h2",
+    type: "Game",
+    mediaType: "Video",
+    title: "Open Play Decision-Making",
+    date: "2026-09-28",
+    source: "Adult Open Play",
+    description: "Prototype game highlight focused on positioning, movement, and decision making under pressure.",
+    url: ""
+  },
+  {
+    id: "h3",
+    type: "Development",
+    mediaType: "Photo",
+    title: "40-Hour Development Milestone",
+    date: "2026-09-29",
+    source: "Development milestone",
+    description: "Prototype featured moment marking the first 40 hours of recorded soccer development.",
+    url: ""
+  }
+],
   
   opportunities: [
     { id: "o1", type: "Team", title: "Grand River FC - Development Squad", organization: "Demo Organization", city: "Grand Rapids, MI", level: "Beginner-Intermediate", schedule: "Tue evenings", cost: "$", description: "Demo team opportunity focused on players building organized match experience.", tags: ["18+", "Team", "Tryout"] },

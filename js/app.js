@@ -681,30 +681,123 @@ function renderProfile() {
 
 </div>
 
-      <div class="card profile-tab-panel" data-profile-panel="achievements" hidden>
-        <div class="card-header">
-          <div>
-            <h3>Achievements</h3>
-            <p class="card-subtitle">Milestones and accomplishments connected to your soccer journey.</p>
-          </div>
-        </div>
+     <div class="profile-tab-panel" data-profile-panel="achievements" hidden>
 
-        <div class="profile-info-grid section-space">
-          <div class="info-cell">
-            <span>Achievements recorded</span>
-            <strong>${state.achievements.length}</strong>
-          </div>
+  <div class="stat-grid">
 
-          <div class="info-cell">
-            <span>Goals tracked</span>
-            <strong>${state.goals.length}</strong>
-          </div>
+    <div class="stat-card">
+      <span class="label">ACHIEVEMENTS RECORDED</span>
+      <strong>${state.achievements.length}</strong>
+      <small>Documented accomplishments</small>
+    </div>
+
+    <div class="stat-card">
+      <span class="label">ACHIEVEMENT TYPES</span>
+      <strong>${new Set(state.achievements.map(item => item.type)).size}</strong>
+      <small>Different categories</small>
+    </div>
+
+    <div class="stat-card">
+      <span class="label">MILESTONES</span>
+      <strong>${state.achievements.filter(item => item.type === "Milestone").length}</strong>
+      <small>Development milestones</small>
+    </div>
+
+    <div class="stat-card">
+      <span class="label">LATEST RECORDED</span>
+      <strong>${
+        state.achievements.length
+          ? formatDate(
+              [...state.achievements]
+                .sort((a, b) => new Date(b.date) - new Date(a.date))[0]
+                .date
+            )
+          : "None"
+      }</strong>
+      <small>Most recent achievement</small>
+    </div>
+
+  </div>
+
+  <div class="content-grid section-space">
+
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <h3>Achievement timeline</h3>
+          <p class="card-subtitle">
+            Milestones, awards, certifications, selections, completed goals,
+            and other accomplishments.
+          </p>
         </div>
+      </div>
+
+      <div class="simple-list">
+        ${[...state.achievements]
+          .sort((a, b) => new Date(b.date) - new Date(a.date))
+          .map(item => `
+            <div class="simple-item">
+              <div class="activity-icon">★</div>
+
+              <div class="activity-copy">
+                <strong>${escapeHtml(item.title)}</strong>
+
+                <span>
+                  ${escapeHtml(item.type)} · ${formatDate(item.date)}
+                </span>
+              </div>
+            </div>
+          `).join("")}
+      </div>
+    </div>
+
+    <div class="stack">
+
+      <div class="card">
+        <h3>Achievement categories</h3>
 
         <p class="bio section-space">
-          This section will become the dedicated home for awards, milestones, certifications, selections, completed goals, and other accomplishments.
+          NextStage can be used to document different kinds of
+          accomplishments instead of treating every athlete's progress
+          as the same path.
+        </p>
+
+        <div class="tag-row section-space">
+          <span class="tag green">Milestones</span>
+          <span class="tag blue">Awards</span>
+          <span class="tag">Certifications</span>
+          <span class="tag">Selections</span>
+          <span class="tag">Completed goals</span>
+          <span class="tag">Other accomplishments</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Future verification</h3>
+
+        <p class="bio section-space">
+          A future production version could distinguish athlete-entered
+          achievements from accomplishments verified by organizations,
+          coaches, leagues, schools, trainers, or other trusted sources.
         </p>
       </div>
+
+      <div class="card">
+        <h3>Your progress still counts</h3>
+
+        <p class="bio section-space">
+          Achievements do not need to be trophies or elite selections.
+          Development milestones, completed goals, certifications,
+          participation accomplishments, and meaningful personal progress
+          can also be part of an athlete's story.
+        </p>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
 
       <div class="card profile-tab-panel" data-profile-panel="highlights" hidden>
         <div class="card-header">

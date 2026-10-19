@@ -420,25 +420,17 @@ function renderProfile() {
 
   <div class="content-grid equal section-space">
 
-    <div class="card">
-     <div class="card-header">
-  <div>
-    <h3>Experience timeline</h3>
-    <p class="card-subtitle">
-      Teams, leagues, training, open play, camps, programs, and other soccer experience.
-    </p>
+   <div class="card">
+  <div class="card-header">
+    <div>
+      <h3>Skill progress</h3>
+      <p class="card-subtitle">
+        Current prototype development categories
+      </p>
+    </div>
   </div>
 
-  <button
-    class="button primary small"
-    type="button"
-    data-action="add-experience"
-  >
-    ＋ Add experience
-  </button>
-</div>
-
-      ${state.development.categories
+  ${state.development.categories
         .map(x => progressBar(x.name, x.score))
         .join("")}
     </div>
@@ -576,17 +568,25 @@ function renderProfile() {
 
   <div class="content-grid section-space">
 
-    <div class="card">
-      <div class="card-header">
-        <div>
-          <h3>Experience timeline</h3>
-          <p class="card-subtitle">
-            Teams, leagues, training, open play, camps, programs, and other soccer experience.
-          </p>
-        </div>
-      </div>
+ <div class="card">
+  <div class="card-header">
+    <div>
+      <h3>Experience timeline</h3>
+      <p class="card-subtitle">
+        Teams, leagues, training, open play, camps, programs, and other soccer experience.
+      </p>
+    </div>
 
-      <div class="simple-list">
+    <button
+      class="button primary small"
+      type="button"
+      data-action="add-experience"
+    >
+      ＋ Add experience
+    </button>
+  </div>
+
+  <div class="simple-list">
         ${state.experiences.map(item => `
           <div class="simple-item">
             <div class="activity-icon">◎</div>

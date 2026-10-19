@@ -6,13 +6,56 @@ function deepClone(value) {
   return JSON.parse(JSON.stringify(value));
 }
 
+function mergeWithDefaults(defaultValue, savedValue) {
+  if (Array.isArray(defaultValue)) {
+    return Array.isArray(savedValue)
+      ? savedValue
+      : deepClone(defaultValue);
+  }
+
+  if (
+    defaultValue &&
+    typeof defaultValue === "object"
+  ) {
+    const savedObject =
+      savedValue &&
+      typeof savedValue === "object" &&
+      !Array.isArray(savedValue)
+        ? savedValue
+        : {};
+
+    const merged = {};
+
+    for (const key of Object.keys(defaultValue)) {
+      merged[key] = mergeWithDefaults(
+        defaultValue[key],
+        savedObject[key]
+      );
+    }
+
+    for (const key of Object.keys(savedObject)) {
+      if (!(key in merged)) {
+        merged[key] = savedObject[key];
+      }
+    }
+
+    return merged;
+  }
+
+  return savedValue !== undefined
+    ? savedValue
+    : deepClone(defaultValue);
+}
+
 export function loadState() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return deepClone(DEFAULT_STATE);
     const parsed = JSON.parse(raw);
     if (!parsed || parsed.version !== DEFAULT_STATE.version) return deepClone(DEFAULT_STATE);
-    return parsed;
+   const migrated = mergeWithDefaults(DEFAULT_STATE, parsed);
+saveState(migrated);
+return migrated;
   } catch (error) {
     console.warn("Could not load saved prototype state.", error);
     return deepClone(DEFAULT_STATE);

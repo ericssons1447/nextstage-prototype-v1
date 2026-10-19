@@ -62,6 +62,46 @@ export const DEFAULT_STATE = {
     { id: "a2", title: "10 Technical Sessions Logged", type: "Consistency", date: "2026-09-18" },
     { id: "a3", title: "Player Profile 80% Complete", type: "Profile", date: "2026-09-12" }
   ],
+
+  experiences: [
+  {
+    id: "e1",
+    type: "Open Play",
+    title: "Adult Open Play",
+    organization: "Community Soccer Network - Demo",
+    location: "Grand Rapids, MI",
+    startDate: "2026-09",
+    endDate: "Present",
+    role: "Player",
+    level: "Recreational",
+    description: "Building game experience, decision making, positioning, and confidence through organized open play."
+  },
+  {
+    id: "e2",
+    type: "Training Program",
+    title: "Small-Group Technical Development",
+    organization: "West Michigan Soccer Lab - Demo",
+    location: "Kentwood, MI",
+    startDate: "2026-08",
+    endDate: "2026-10",
+    role: "Player",
+    level: "Beginner-Intermediate",
+    description: "Structured technical training focused on first touch, passing, movement, dribbling, and finishing."
+  },
+  {
+    id: "e3",
+    type: "Independent Development",
+    title: "Individual Soccer Development",
+    organization: "Self-directed",
+    location: "Grand Rapids, MI",
+    startDate: "2026-06",
+    endDate: "Present",
+    role: "Player",
+    level: "Developing / Beginner",
+    description: "Independent technical practice, fitness work, tactical learning, and preparation for organized team opportunities."
+  }
+],
+  
   opportunities: [
     { id: "o1", type: "Team", title: "Grand River FC - Development Squad", organization: "Demo Organization", city: "Grand Rapids, MI", level: "Beginner-Intermediate", schedule: "Tue evenings", cost: "$", description: "Demo team opportunity focused on players building organized match experience.", tags: ["18+", "Team", "Tryout"] },
     { id: "o2", type: "Training", title: "Small-Group Technical Development", organization: "West Michigan Soccer Lab - Demo", city: "Kentwood, MI", level: "All levels", schedule: "Sat mornings", cost: "$$", description: "Demo small-group session covering first touch, passing, movement, and finishing.", tags: ["Training", "Small group", "All ages"] },

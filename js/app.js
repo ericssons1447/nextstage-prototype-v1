@@ -121,6 +121,19 @@ function formatDate(dateString) {
   return new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric", year: "numeric" }).format(date);
 }
 
+function formatExperienceDate(value) {
+  if (!value) return "Not set";
+  if (value === "Present") return "Present";
+
+  const [year, month] = value.split("-");
+  const date = new Date(Number(year), Number(month) - 1, 1);
+
+  return new Intl.DateTimeFormat("en-US", {
+    month: "short",
+    year: "numeric"
+  }).format(date);
+}
+
 function totalMinutesToHours(minutes) {
   return Math.round((minutes / 60) * 100) / 100;
 }
@@ -525,20 +538,94 @@ function renderProfile() {
 
 </div>
 
-      <div class="card profile-tab-panel" data-profile-panel="experience" hidden>
+ <div class="profile-tab-panel" data-profile-panel="experience" hidden>
+
+  <div class="stat-grid">
+    <div class="stat-card">
+      <span class="label">EXPERIENCE ENTRIES</span>
+      <strong>${state.experiences.length}</strong>
+      <small>Recorded experiences</small>
+    </div>
+
+    <div class="stat-card">
+      <span class="label">CURRENT EXPERIENCES</span>
+      <strong>${state.experiences.filter(item => item.endDate === "Present").length}</strong>
+      <small>Currently active</small>
+    </div>
+
+    <div class="stat-card">
+      <span class="label">EXPERIENCE TYPES</span>
+      <strong>${new Set(state.experiences.map(item => item.type)).size}</strong>
+      <small>Different pathways</small>
+    </div>
+
+    <div class="stat-card">
+      <span class="label">CURRENT LEVEL</span>
+      <strong>${escapeHtml(p.experienceLevel)}</strong>
+      <small>Player-reported level</small>
+    </div>
+  </div>
+
+  <div class="content-grid section-space">
+
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <h3>Experience timeline</h3>
+          <p class="card-subtitle">
+            Teams, leagues, training, open play, camps, programs, and other soccer experience.
+          </p>
+        </div>
+      </div>
+
+      <div class="simple-list">
+        ${state.experiences.map(item => `
+          <div class="simple-item">
+            <div class="activity-icon">◎</div>
+
+            <div class="activity-copy">
+              <strong>${escapeHtml(item.title)}</strong>
+
+              <span>
+                ${escapeHtml(item.organization)} ·
+                ${escapeHtml(item.type)}
+              </span>
+
+              <span>
+                ${formatExperienceDate(item.startDate)}
+                –
+                ${formatExperienceDate(item.endDate)}
+                ·
+                ${escapeHtml(item.location)}
+              </span>
+
+              <span>
+                ${escapeHtml(item.role)} ·
+                ${escapeHtml(item.level)}
+              </span>
+
+              <p class="bio" style="margin:8px 0 0;">
+                ${escapeHtml(item.description)}
+              </p>
+            </div>
+          </div>
+        `).join("")}
+      </div>
+    </div>
+
+    <div class="stack">
+
+      <div class="card">
         <div class="card-header">
           <div>
-            <h3>Experience</h3>
-            <p class="card-subtitle">Your playing background and current soccer experience.</p>
+            <h3>Player experience profile</h3>
+            <p class="card-subtitle">
+              Current soccer background and availability.
+            </p>
           </div>
         </div>
 
-        <div class="profile-info-grid section-space">
-          <div class="info-cell">
-            <span>Experience level</span>
-            <strong>${escapeHtml(p.experienceLevel)}</strong>
-          </div>
-
+        <div class="profile-info-grid">
           <div class="info-cell">
             <span>Primary position</span>
             <strong>${escapeHtml(p.primaryPosition)}</strong>
@@ -550,15 +637,41 @@ function renderProfile() {
           </div>
 
           <div class="info-cell">
-            <span>Availability</span>
-            <strong>${escapeHtml(p.availability)}</strong>
+            <span>Dominant foot</span>
+            <strong>${escapeHtml(p.dominantFoot)}</strong>
+          </div>
+
+          <div class="info-cell">
+            <span>Experience level</span>
+            <strong>${escapeHtml(p.experienceLevel)}</strong>
           </div>
         </div>
+      </div>
+
+      <div class="card">
+        <h3>Availability</h3>
 
         <p class="bio section-space">
-          A full experience timeline for clubs, leagues, camps, training programs, and other playing history can be built into this section next.
+          ${escapeHtml(p.availability)}
         </p>
       </div>
+
+      <div class="card">
+        <h3>Experience can take different paths</h3>
+
+        <p class="bio section-space">
+          NextStage is designed to document traditional and nontraditional
+          soccer experience, including teams, leagues, schools, clubs,
+          academies, camps, clinics, training programs, pickup or open play,
+          independent development, and other meaningful playing experience.
+        </p>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
 
       <div class="card profile-tab-panel" data-profile-panel="achievements" hidden>
         <div class="card-header">

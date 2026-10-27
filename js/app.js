@@ -727,7 +727,7 @@ function renderProfile() {
 
   </div>
 
-  <div class="content-grid section-space">
+  <div class="section-space">
 
     <div class="card">
     <div class="card-header">
@@ -777,7 +777,7 @@ function renderProfile() {
       </div>
     </div>
 
-    <div class="stack">
+    <div class="passport-support-grid">
 
       <div class="card">
         <h3>Achievement categories</h3>

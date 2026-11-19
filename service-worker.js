@@ -1,4 +1,4 @@
-const CACHE_NAME = "nextstage-v1-cache-1";
+const CACHE_NAME = "nextstage-v1-cache-branch-test-1";
 const APP_FILES = [
   "./",
   "./index.html",
@@ -6,6 +6,7 @@ const APP_FILES = [
   "./js/app.js",
   "./js/data.js",
   "./js/storage.js",
+  "./js/auth.js",
   "./manifest.webmanifest",
   "./assets/icons/icon-192.png",
   "./assets/icons/icon-512.png",

@@ -32,10 +32,18 @@ jobs:
           node --check service-worker.js
           node --check tests/v1-smoke.mjs
 
-      - name: Install Playwright
+      - name: Install browser test library
+        run: npm install --no-save playwright@1.56.1
+
+      - name: Locate GitHub runner Chrome
         run: |
-          npm install --no-save playwright@1.56.1
-          npx playwright install --with-deps chromium
+          CHROME_PATH="$(command -v google-chrome || command -v google-chrome-stable || command -v chromium || command -v chromium-browser || true)"
+          if [ -z "$CHROME_PATH" ]; then
+            echo "No Chrome/Chromium executable found on GitHub runner."
+            exit 1
+          fi
+          "$CHROME_PATH" --version
+          echo "CHROME_PATH=$CHROME_PATH" >> "$GITHUB_ENV"
 
       - name: Start local prototype server
         run: |

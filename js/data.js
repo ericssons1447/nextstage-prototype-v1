@@ -132,8 +132,16 @@ export const DEFAULT_STATE = {
     source: "Development milestone",
     description: "Prototype featured moment marking the first 40 hours of recorded soccer development.",
     url: ""
-  }
+   }
 ],
+
+  featuredPassport: {
+    overviewChoice: "about",
+    developmentCategory: "Ball Mastery",
+    experienceId: "e1",
+    achievementId: "a1",
+    highlightId: "h1"
+  },
   
   opportunities: [
     { id: "o1", type: "Team", title: "Grand River FC - Development Squad", organization: "Demo Organization", city: "Grand Rapids, MI", level: "Beginner-Intermediate", schedule: "Tue evenings", cost: "$", description: "Demo team opportunity focused on players building organized match experience.", tags: ["18+", "Team", "Tryout"] },

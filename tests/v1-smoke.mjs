@@ -156,3 +156,5 @@ try {
 } finally {
   await browser.close();
 }
+
+// Triggered after workflow installation.

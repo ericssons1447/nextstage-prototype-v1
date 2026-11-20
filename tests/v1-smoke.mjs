@@ -20,7 +20,13 @@ async function attachErrorCapture(page, bucket) {
   });
 }
 
-const browser = await chromium.launch({ headless: true });
+const chromePath = process.env.CHROME_PATH;
+assert(chromePath, "CHROME_PATH was not supplied by GitHub Actions.");
+const browser = await chromium.launch({
+  headless: true,
+  executablePath: chromePath,
+  args: ["--no-sandbox", "--disable-dev-shm-usage"]
+});
 const failures = [];
 
 try {

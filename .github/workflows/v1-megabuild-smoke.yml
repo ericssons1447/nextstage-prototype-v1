@@ -1,0 +1,66 @@
+name: V1 Mega-build Smoke Test
+
+on:
+  push:
+    branches:
+      - v1-megabuild-test
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  smoke-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Check out test branch
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Verify JavaScript syntax
+        run: |
+          node --check js/app.js
+          node --check js/data.js
+          node --check js/storage.js
+          node --check js/auth.js
+          node --check service-worker.js
+          node --check tests/v1-smoke.mjs
+
+      - name: Install Playwright
+        run: |
+          npm install --no-save playwright@1.56.1
+          npx playwright install --with-deps chromium
+
+      - name: Start local prototype server
+        run: |
+          python3 -m http.server 4173 > /tmp/nextstage-http.log 2>&1 &
+          echo $! > /tmp/nextstage-http.pid
+          for i in {1..30}; do
+            if curl -fsS http://127.0.0.1:4173/ >/dev/null; then
+              exit 0
+            fi
+            sleep 1
+          done
+          cat /tmp/nextstage-http.log
+          exit 1
+
+      - name: Run browser smoke test
+        run: node tests/v1-smoke.mjs
+
+      - name: Show server log on failure
+        if: failure()
+        run: cat /tmp/nextstage-http.log || true
+
+      - name: Upload browser screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: v1-smoke-screenshots
+          path: test-artifacts/
+          if-no-files-found: warn

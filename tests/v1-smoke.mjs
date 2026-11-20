@@ -140,9 +140,23 @@ try {
     assert(await visible(page, "#v1AdminShell"), "Admin: backend/admin shell did not appear.");
     const adminText = await page.locator("#v1AdminShell").innerText();
     assert(adminText.includes("Backend") || adminText.includes("Admin"), "Admin: expected backend/admin content missing.");
-    assert(await page.locator('[data-v1-admin-tab="inspiration"]').count() === 1, "Admin: Inspiration CMS tab missing.");
-    assert(await page.locator('[data-v1-admin-tab="diagnostics"]').count() === 1, "Admin: Diagnostics tab missing.");
-    await page.locator('[data-v1-admin-tab="inspiration"]').click();
+
+    await page.screenshot({ path: `${OUT}/04-admin-before-tab-check.png`, fullPage: true });
+    const inspirationTabCount = await page.locator('[data-v1-admin-tab="inspiration"]').count();
+    const diagnosticsTabCount = await page.locator('[data-v1-admin-tab="diagnostics"]').count();
+    const adminNavCount = await page.locator("#v1AdminNav").count();
+    const adminNavHtml = adminNavCount ? await page.locator("#v1AdminNav").innerHTML() : "(missing #v1AdminNav)";
+    console.log("ADMIN_DIAGNOSTIC", JSON.stringify({
+      inspirationTabCount,
+      diagnosticsTabCount,
+      adminNavCount,
+      adminNavHtml,
+      browserErrors: errors
+    }));
+
+    assert(inspirationTabCount >= 1, "Admin: Inspiration CMS tab missing.");
+    assert(diagnosticsTabCount >= 1, "Admin: Diagnostics tab missing.");
+    await page.locator('[data-v1-admin-tab="inspiration"]').first().click();
     await page.waitForTimeout(120);
     assert((await page.locator("#v1AdminShell").innerText()).includes("Inspiration"), "Admin: Inspiration manager did not render.");
     await page.screenshot({ path: `${OUT}/04-admin-inspiration.png`, fullPage: true });

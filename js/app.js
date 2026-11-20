@@ -339,7 +339,29 @@ function renderDashboard() {
 function renderProfile() {
   const view = $("#view-profile");
   const p = state.profile;
- const publicIdentity = getPublicIdentityText(p);
+const publicIdentity = getPublicIdentityText(p);
+
+const featured = state.featuredPassport || {};
+
+const featuredDevelopment =
+  state.development.categories.find(
+    item => item.name === featured.developmentCategory
+  ) || state.development.categories[0];
+
+const featuredExperience =
+  state.experiences.find(
+    item => item.id === featured.experienceId
+  ) || state.experiences[0];
+
+const featuredAchievement =
+  state.achievements.find(
+    item => item.id === featured.achievementId
+  ) || state.achievements[0];
+
+const featuredHighlight =
+  state.highlights.find(
+    item => item.id === featured.highlightId
+  ) || state.highlights[0];
   view.innerHTML = `
     ${pageHead("Athlete Passport", "Your soccer identity, in one profile", "Prototype of an athlete-controlled profile designed to show development, experience, goals, and verified accomplishments over time.", `<button class="button navy" data-action="edit-profile">Edit profile</button>`)}
 
@@ -368,6 +390,76 @@ function renderProfile() {
   View All
 </button>
    </div>
+
+   <div class="card section-space profile-tab-panel" data-profile-panel="overview">
+      <div class="card-header">
+        <div>
+          <h3>Featured from your Passport</h3>
+          <p class="card-subtitle">
+            Player-selected snapshots from across your development, experience,
+            achievements, and highlights.
+          </p>
+        </div>
+      </div>
+
+      <div class="simple-list">
+
+        ${featuredDevelopment ? `
+          <div class="simple-item">
+            <div class="activity-icon">↗</div>
+            <div class="activity-copy">
+              <strong>Development · ${escapeHtml(featuredDevelopment.name)}</strong>
+              <span>${featuredDevelopment.score}% current prototype progress</span>
+            </div>
+          </div>
+        ` : ""}
+
+        ${featuredExperience ? `
+          <div class="simple-item">
+            <div class="activity-icon">◎</div>
+            <div class="activity-copy">
+              <strong>Experience · ${escapeHtml(featuredExperience.title)}</strong>
+              <span>
+                ${escapeHtml(featuredExperience.organization)} ·
+                ${formatExperienceDate(featuredExperience.startDate)}
+                –
+                ${formatExperienceDate(featuredExperience.endDate)}
+              </span>
+            </div>
+          </div>
+        ` : ""}
+
+        ${featuredAchievement ? `
+          <div class="simple-item">
+            <div class="activity-icon">★</div>
+            <div class="activity-copy">
+              <strong>Achievement · ${escapeHtml(featuredAchievement.title)}</strong>
+              <span>
+                ${escapeHtml(featuredAchievement.type)} ·
+                ${formatDate(featuredAchievement.date)}
+              </span>
+            </div>
+          </div>
+        ` : ""}
+
+        ${featuredHighlight ? `
+          <div class="simple-item">
+            <div class="activity-icon">
+              ${featuredHighlight.mediaType === "Video" ? "▶" : "▧"}
+            </div>
+            <div class="activity-copy">
+              <strong>Highlight · ${escapeHtml(featuredHighlight.title)}</strong>
+              <span>
+                ${escapeHtml(featuredHighlight.mediaType)} ·
+                ${escapeHtml(featuredHighlight.type)} ·
+                ${formatDate(featuredHighlight.date)}
+              </span>
+            </div>
+          </div>
+        ` : ""}
+
+      </div>
+    </div>
 
   <div class="content-grid profile-tab-panel" data-profile-panel="overview">
       <div class="stack">

@@ -362,6 +362,61 @@ const featuredHighlight =
   state.highlights.find(
     item => item.id === featured.highlightId
   ) || state.highlights[0];
+
+const overviewFeaturedChoices = {
+  about: {
+    id: "about",
+    title: "About",
+    icon: "◉",
+    detail: p.bio
+  },
+  "player-details": {
+    id: "player-details",
+    title: "Player details",
+    icon: "◎",
+    detail: [p.primaryPosition, p.experienceLevel, `${p.city}, ${p.region}`]
+      .filter(Boolean)
+      .join(" · ")
+  },
+  "profile-completion": {
+    id: "profile-completion",
+    title: "Profile completion",
+    icon: "✓",
+    detail: `${p.profileCompletion}% of Athlete Passport complete`
+  }
+};
+
+const featuredOverview =
+  overviewFeaturedChoices[featured.overviewChoice] ||
+  overviewFeaturedChoices.about;
+
+const featuredOverviewSummary = `
+  <div class="card section-space" data-featured-summary>
+    <div class="card-header">
+      <div>
+        <h3>Featured from Overview</h3>
+        <p class="card-subtitle">
+          A player-selected snapshot from the main Athlete Passport overview.
+        </p>
+      </div>
+    </div>
+
+    <button
+      type="button"
+      class="simple-item featured-summary-link"
+      data-action="open-featured-source"
+      data-feature-tab="overview"
+      data-feature-id="${escapeHtml(featuredOverview.id)}"
+    >
+      <span class="activity-icon">${featuredOverview.icon}</span>
+      <span class="activity-copy">
+        <strong>${escapeHtml(featuredOverview.title)}</strong>
+        <span>${escapeHtml(featuredOverview.detail)}</span>
+      </span>
+    </button>
+  </div>
+`;
+
   view.innerHTML = `
     ${pageHead("Athlete Passport", "Your soccer identity, in one profile", "Prototype of an athlete-controlled profile designed to show development, experience, goals, and verified accomplishments over time.", `<button class="button navy" data-action="edit-profile">Edit profile</button>`)}
 
@@ -391,7 +446,7 @@ const featuredHighlight =
 </button>
    </div>
 
-   <div class="card section-space profile-tab-panel" data-profile-panel="overview">
+   <div class="card section-space profile-tab-panel" data-profile-panel="overview" data-featured-summary>
       <div class="card-header">
         <div>
           <h3>Featured from your Passport</h3>
@@ -487,7 +542,11 @@ const featuredHighlight =
 
   <div class="content-grid profile-tab-panel" data-profile-panel="overview">
       <div class="stack">
-        <div class="card"><h3>About</h3><p class="bio">${escapeHtml(p.bio)}</p></div>
+        <div
+          class="card"
+          data-feature-source="overview"
+          data-feature-id="about"
+        ><h3>About</h3><p class="bio">${escapeHtml(p.bio)}</p></div>
         <div class="card">
           <div class="card-header"><div><h3>Achievements</h3><p class="card-subtitle">Prototype milestones and future verification area</p></div></div>
           <div class="simple-list">
@@ -496,7 +555,11 @@ const featuredHighlight =
         </div>
       </div>
       <div class="stack">
-        <div class="card">
+        <div
+          class="card"
+          data-feature-source="overview"
+          data-feature-id="player-details"
+        >
           <h3>Player details</h3>
           <div class="profile-info-grid section-space">
             <div class="info-cell"><span>Primary position</span><strong>${escapeHtml(p.primaryPosition)}</strong></div>
@@ -507,7 +570,11 @@ const featuredHighlight =
             <div class="info-cell"><span>Availability</span><strong>${escapeHtml(p.availability)}</strong></div>
           </div>
         </div>
-        <div class="card">
+        <div
+          class="card"
+          data-feature-source="overview"
+          data-feature-id="profile-completion"
+        >
           <div class="card-header"><div><h3>Profile completion</h3><p class="card-subtitle">A future production version could guide athletes through missing fields.</p></div></div>
           ${progressBar("Athlete Passport", p.profileCompletion)}
         </div>
@@ -515,6 +582,8 @@ const featuredHighlight =
           </div>
 
      <div class="profile-tab-panel" data-profile-panel="development" hidden>
+
+  ${featuredOverviewSummary}
 
   <div class="stat-grid">
     <div class="stat-card">
@@ -671,6 +740,8 @@ const featuredHighlight =
 
  <div class="profile-tab-panel" data-profile-panel="experience" hidden>
 
+  ${featuredOverviewSummary}
+
   <div class="stat-grid">
     <div class="stat-card">
       <span class="label">EXPERIENCE ENTRIES</span>
@@ -818,6 +889,8 @@ const featuredHighlight =
 
      <div class="profile-tab-panel" data-profile-panel="achievements" hidden>
 
+  ${featuredOverviewSummary}
+
   <div class="stat-grid">
 
     <div class="stat-card">
@@ -957,6 +1030,8 @@ const featuredHighlight =
 </div>
 
    <div class="profile-tab-panel" data-profile-panel="highlights" hidden>
+
+  ${featuredOverviewSummary}
 
   <div class="stat-grid">
 
@@ -1129,9 +1204,16 @@ function setProfileTab(tabName) {
  const showAll = tabName === "all";
 
 $$("[data-profile-panel]", profileView).forEach(panel => {
+  const hideFeaturedInViewAll =
+    showAll && panel.hasAttribute("data-featured-summary");
+
   panel.hidden =
-    !showAll &&
-    panel.dataset.profilePanel !== tabName;
+    hideFeaturedInViewAll ||
+    (!showAll && panel.dataset.profilePanel !== tabName);
+});
+
+$$("[data-featured-summary]:not([data-profile-panel])", profileView).forEach(summary => {
+  summary.hidden = showAll;
 });
 }
 

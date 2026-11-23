@@ -405,56 +405,88 @@ const featuredHighlight =
       <div class="simple-list">
 
         ${featuredDevelopment ? `
-          <div class="simple-item">
-            <div class="activity-icon">↗</div>
-            <div class="activity-copy">
-              <strong>Development · ${escapeHtml(featuredDevelopment.name)}</strong>
-              <span>${featuredDevelopment.score}% current prototype progress</span>
-            </div>
-          </div>
-        ` : ""}
-
-        ${featuredExperience ? `
-          <div class="simple-item">
-            <div class="activity-icon">◎</div>
-            <div class="activity-copy">
-              <strong>Experience · ${escapeHtml(featuredExperience.title)}</strong>
-              <span>
-                ${escapeHtml(featuredExperience.organization)} ·
-                ${formatExperienceDate(featuredExperience.startDate)}
-                –
-                ${formatExperienceDate(featuredExperience.endDate)}
-              </span>
-            </div>
+         <button
+  type="button"
+  class="simple-item featured-summary-link"
+  data-action="open-featured-source"
+  data-feature-tab="development"
+  data-feature-id="${escapeHtml(featuredDevelopment.name)}"
+>
+  <span class="activity-icon">↗</span>
+  <span class="activity-copy">
+${featuredExperience ? `
+  <button
+    type="button"
+    class="simple-item featured-summary-link"
+    data-action="open-featured-source"
+    data-feature-tab="experience"
+    data-feature-id="${escapeHtml(featuredExperience.id)}"
+  >
+    <span class="activity-icon">◎</span>
+    <span class="activity-copy">
+      <strong>Experience · ${escapeHtml(featuredExperience.title)}</strong>
+      <span>
+        ${escapeHtml(featuredExperience.organization)} ·
+        ${formatExperienceDate(featuredExperience.startDate)}
+        –
+        ${formatExperienceDate(featuredExperience.endDate)}
+      </span>
+    </span>
+  </button>
+` : ""}
+  <span class="activity-copy">
+    <strong>Experience · ${escapeHtml(featuredExperience.title)}</strong>
+    <span>
+      ${escapeHtml(featuredExperience.organization)} ·
+      ${formatExperienceDate(featuredExperience.startDate)}
+      –
+      ${formatExperienceDate(featuredExperience.endDate)}
+    </span>
+  </span>
+</button>
           </div>
         ` : ""}
 
         ${featuredAchievement ? `
-          <div class="simple-item">
-            <div class="activity-icon">★</div>
-            <div class="activity-copy">
-              <strong>Achievement · ${escapeHtml(featuredAchievement.title)}</strong>
-              <span>
-                ${escapeHtml(featuredAchievement.type)} ·
-                ${formatDate(featuredAchievement.date)}
-              </span>
-            </div>
+          <button
+  type="button"
+  class="simple-item featured-summary-link"
+  data-action="open-featured-source"
+  data-feature-tab="achievements"
+  data-feature-id="${escapeHtml(featuredAchievement.id)}"
+>
+  <span class="activity-icon">★</span>
+  <span class="activity-copy">
+    <strong>Achievement · ${escapeHtml(featuredAchievement.title)}</strong>
+    <span>
+      ${escapeHtml(featuredAchievement.type)} ·
+      ${formatDate(featuredAchievement.date)}
+    </span>
+  </span>
+</button>
           </div>
         ` : ""}
 
         ${featuredHighlight ? `
-          <div class="simple-item">
-            <div class="activity-icon">
-              ${featuredHighlight.mediaType === "Video" ? "▶" : "▧"}
-            </div>
-            <div class="activity-copy">
-              <strong>Highlight · ${escapeHtml(featuredHighlight.title)}</strong>
-              <span>
-                ${escapeHtml(featuredHighlight.mediaType)} ·
-                ${escapeHtml(featuredHighlight.type)} ·
-                ${formatDate(featuredHighlight.date)}
-              </span>
-            </div>
+          <button
+  type="button"
+  class="simple-item featured-summary-link"
+  data-action="open-featured-source"
+  data-feature-tab="highlights"
+  data-feature-id="${escapeHtml(featuredHighlight.id)}"
+>
+  <span class="activity-icon">
+    ${featuredHighlight.mediaType === "Video" ? "▶" : "▧"}
+  </span>
+  <span class="activity-copy">
+    <strong>Highlight · ${escapeHtml(featuredHighlight.title)}</strong>
+    <span>
+      ${escapeHtml(featuredHighlight.mediaType)} ·
+      ${escapeHtml(featuredHighlight.type)} ·
+      ${formatDate(featuredHighlight.date)}
+    </span>
+  </span>
+</button>
           </div>
         ` : ""}
 
@@ -531,8 +563,15 @@ const featuredHighlight =
   </div>
 
   ${state.development.categories
-        .map(x => progressBar(x.name, x.score))
-        .join("")}
+  .map(x => `
+    <div
+      data-feature-source="development"
+      data-feature-id="${escapeHtml(x.name)}"
+    >
+      ${progressBar(x.name, x.score)}
+    </div>
+  `)
+  .join("")}
     </div>
 
     <div class="card">
@@ -688,7 +727,11 @@ const featuredHighlight =
 
   <div class="simple-list">
         ${state.experiences.map(item => `
-          <div class="simple-item">
+          <div
+  class="simple-item"
+  data-feature-source="experience"
+  data-feature-id="${escapeHtml(item.id)}"
+>
             <div class="activity-icon">◎</div>
 
             <div class="activity-copy">
@@ -844,7 +887,11 @@ const featuredHighlight =
         ${[...state.achievements]
           .sort((a, b) => new Date(b.date) - new Date(a.date))
           .map(item => `
-            <div class="simple-item">
+  <div
+    class="simple-item"
+    data-feature-source="achievements"
+    data-feature-id="${escapeHtml(item.id)}"
+  >
               <div class="activity-icon">★</div>
 
              <div class="activity-copy">
@@ -973,7 +1020,11 @@ const featuredHighlight =
         ${[...state.highlights]
           .sort((a, b) => new Date(b.date) - new Date(a.date))
           .map(item => `
-            <div class="simple-item">
+  <div
+    class="simple-item"
+    data-feature-source="highlights"
+    data-feature-id="${escapeHtml(item.id)}"
+  >
 
               <div class="activity-icon">
                 ${item.mediaType === "Video" ? "▶" : "▧"}
@@ -1090,6 +1141,38 @@ $$("[data-profile-panel]", profileView).forEach(panel => {
     !showAll &&
     panel.dataset.profilePanel !== tabName;
 });
+}
+
+function openFeaturedSource(tabName, sourceId) {
+  const profileView = $("#view-profile");
+  if (!profileView) return;
+
+  setProfileTab(tabName);
+
+  window.setTimeout(() => {
+    const source = $$("[data-feature-source]", profileView).find(
+      item =>
+        item.dataset.featureSource === tabName &&
+        item.dataset.featureId === sourceId
+    );
+
+    if (!source) return;
+
+    source.scrollIntoView({
+      behavior: "smooth",
+      block: "center"
+    });
+
+    source.classList.remove("featured-source-flash");
+
+    void source.offsetWidth;
+
+    source.classList.add("featured-source-flash");
+
+    window.setTimeout(() => {
+      source.classList.remove("featured-source-flash");
+    }, 2000);
+  }, 100);
 }
 
 function renderDevelopment() {
@@ -1765,6 +1848,14 @@ function handleAction(action, target) {
     case "profile-tab":
   setProfileTab(target.dataset.profileTab);
   break;
+
+      case "open-featured-source":
+  openFeaturedSource(
+    target.dataset.featureTab,
+    target.dataset.featureId
+  );
+  break;
+      
     case "log-training": trainingModal(); break;
     case "add-goal": goalModal(); break;
     case "add-experience": experienceModal(); break;
